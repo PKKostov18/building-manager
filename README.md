@@ -26,5 +26,5 @@
 * **Framework:** Spring Boot 3+
 * **Security:** Spring Security
 * **Database:** Spring Data JPA / Hibernate
-* **Database Type:** Релационна БД (напр. PostgreSQL / MySQL)
-* **Build Tool:** Maven / Gradle
+* **Database Type:** MSSQL
+* **Build Tool:** Gradle

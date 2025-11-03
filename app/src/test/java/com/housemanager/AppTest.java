@@ -4,11 +4,27 @@
 package com.housemanager;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    
+    @Autowired
+    private ApplicationContext applicationContext;
+    
+    @Test
+    void contextLoads() {
+        assertNotNull(applicationContext, "Application context should load");
+    }
+    
+    @Test
+    void mainMethodExists() {
+        // Verify the main method exists and can be called
+        assertDoesNotThrow(() -> {
+            App.class.getMethod("main", String[].class);
+        });
     }
 }

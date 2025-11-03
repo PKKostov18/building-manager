@@ -3,3 +3,24 @@
 
 # Ignore Gradle build output directory
 build
+
+# Spring Boot specific
+*.log
+*.log.*
+*.pid
+*.pid.lock
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE specific
+.idea
+*.iml
+*.iws
+*.ipr
+.vscode
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db

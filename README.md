@@ -1,26 +1,26 @@
-# Електронен домоуправител (Building Manager SaaS)
+# Building Manager (SaaS Platform)
 
-Това е Java/Spring Boot приложение, което реализира SaaS (Software-as-a-Service) платформа "Електронен домоуправител". Проектът е разработен въз основа на заданието за курс CSCB525 и симулира реална система, която позволява на фирми за професионално управление на етажна собственост да менажират своите клиенти, сгради, служители и месечни такси.
+This is a Java/Spring Boot application that implements a SaaS (Software-as-a-Service) platform, "Building Manager". The project is based on the CSCB525 course assignment and simulates a real system that allows professional property management companies to manage their clients, buildings, employees, and monthly fees.
 
-Системата е изградена със Spring Security и поддържа 3 различни потребителски роли:
-1.  **ADMIN:** Пълен контрол над платформата, управлява фирмите-клиенти.
-2.  **COMPANY:** Профил за фирма-домоуправител. Управлява *своите* служители, сгради, апартаменти и живущи.
-3.  **RESIDENT:** Профил за живущ (вдъхновен от Livo). Има достъп само до *своя* апартамент, история на плащанията и текущите си задължения.
+The system is built with Spring Security and supports 3 different user roles:
+1.  **ADMIN:** Full control over the platform; manages the client companies.
+2.  **COMPANY:** A profile for a property management company. Manages *its own* employees, buildings, apartments, and residents.
+3.  **RESIDENT:** A profile for a resident (inspired by Livo). Has access only to *their own* apartment, payment history, and current dues.
 
-## 🎯 Основни Функционалности
+## 🎯 Core Features
 
-* Пълни CRUD операции за Компании, Сгради, Апартаменти, Живущи и Служители.
-* Сигурна автентикация и авторизация с **Spring Security** (хеширане на пароли с BCrypt).
-* Сложена бизнес логика за **автоматично изчисляване на такси** въз основа на:
-    * Квадратура на апартамента.
-    * Брой живущи над 7-годишна възраст.
-    * Наличие на домашни любимци.
-* Бизнес логика за **автоматизирано разпределяне** на нови сгради към служителя с най-малко обекти.
-* Логика за **преразпределяне** на сгради при освобождаване на служител.
-* Генериране на справки (общ приход, сгради по служители и др.).
-* Записване на данни за платени такси във файл.
+* Full CRUD operations for Companies, Buildings, Apartments, Residents, and Employees.
+* Secure authentication and authorization with **Spring Security** (password hashing with BCrypt).
+* Complex business logic for **automatic fee calculation** based on:
+    * Apartment area.
+    * Number of residents over 7 years of age.
+    * Presence of pets.
+* Business logic for **automatic assignment** of new buildings to the employee with the fewest properties.
+* Logic for **re-assigning** buildings upon an employee's departure.
+* Report generation (total revenue, buildings per employee, etc.).
+* Saving paid fee data to a file.
 
-## 🛠️ Технологичен Стек
+## 🛠️ Tech Stack
 
 * **Backend:** Java 17+
 * **Framework:** Spring Boot 3+

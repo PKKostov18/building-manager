@@ -1,4 +1,4 @@
-# Building Manager (SaaS Platform)
+# House Manager (SaaS Platform)
 
 This is a Java/Spring Boot application that implements a SaaS (Software-as-a-Service) platform, "Building Manager". The project is based on the CSCB525 course assignment and simulates a real system that allows professional property management companies to manage their clients, buildings, employees, and monthly fees.
 

@@ -1,6 +1,3 @@
-/*
- * Spring Boot Application for House Manager SaaS
- */
 package com.housemanager;
 
 import org.springframework.boot.SpringApplication;

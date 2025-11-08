@@ -1,0 +1,121 @@
+/* Global styles & Font */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    color: #111827;
+}
+
+/* --- Login Page Styles --- */
+
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 28rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.auth-header {
+    text-align: center;
+}
+
+.auth-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.auth-header p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.alert-error {
+    margin-top: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #f87171;
+    background-color: #fee2e2;
+    padding: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #b91c1c;
+}
+
+.alert-success {
+    margin-top: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #4ade80;
+    background-color: #dcfce7;
+    padding: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #166534;
+}
+
+.auth-card form {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-input {
+    margin-top: 0.25rem;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px #a5b4fc;
+}
+
+.btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #4f46e5;
+}
+.btn-primary:hover {
+    background-color: #4338ca;
+}
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #a5b4fc;
+}

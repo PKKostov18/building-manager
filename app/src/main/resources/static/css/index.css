@@ -1,0 +1,171 @@
+/* Global styles & Font */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    color: #111827;
+}
+
+/* --- Layout & Navbar --- */
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 80rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+@media (min-width: 1024px) {
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+nav {
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.navbar-content {
+    display: flex;
+    height: 4rem;
+    justify-content: space-between;
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+.nav-links a {
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.nav-links a:hover {
+    color: #4f46e5;
+    background-color: #f3f4f6;
+}
+
+.user-greeting {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+.logout-button {
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #ef4444;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+.logout-button:hover {
+    background-color: #dc2626;
+}
+
+/* --- Content Card (Authenticated) --- */
+.content-card {
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.content-card h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.content-card p {
+    margin-top: 0.5rem;
+    color: #4b5563;
+}
+
+/* --- Anonymous Styles --- */
+.anonymous-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.anonymous-card {
+    width: 100%;
+    max-width: 28rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.anonymous-card h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.anonymous-card p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+.anonymous-card a {
+    margin-top: 1.5rem;
+    display: inline-block;
+    text-decoration: none;
+    width: 75%;
+}
+
+/* Button styles (needed for anonymous card) */
+.btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+.btn-primary {
+    background-color: #4f46e5;
+}
+.btn-primary:hover {
+    background-color: #4338ca;
+}
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #a5b4fc;
+}

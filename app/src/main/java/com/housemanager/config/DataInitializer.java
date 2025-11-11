@@ -6,6 +6,7 @@ import com.housemanager.model.User;
 import com.housemanager.repository.RoleRepository;
 import com.housemanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,9 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${housemanager.admin.default-password}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -41,7 +45,7 @@ public class DataInitializer implements CommandLineRunner {
             User adminUser = new User();
             adminUser.setUsername("admin");
             adminUser.setEmail("admin@housemanager.com");
-            adminUser.setPassword(passwordEncoder.encode("admin123"));
+            adminUser.setPassword(passwordEncoder.encode(adminPassword));
             adminUser.setRoles(Set.of(adminRole));
 
             userRepository.save(adminUser);

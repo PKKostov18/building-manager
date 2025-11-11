@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Companies</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/company-list.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div sec:authorize="isAuthenticated()">
+
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Manage Companies</h1>
+                <a th:href="@{/admin/companies/new}" class="btn-add">
+                    Add New Company
+                </a>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Bulstat</th>
+                    <th>Contact Person</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${companies.isEmpty()}">
+                    <td colspan="5" style="text-align: center;">No companies found.</td>
+                </tr>
+                <tr th:each="company : ${companies}">
+                    <td th:text="${company.name}">Test Company</td>
+                    <td th:text="${company.bulstat}">123456789</td>
+                    <td th:text="${company.contactPerson}">John Doe</td>
+                    <td th:text="${company.user.username}">company_user</td>
+                    <td th:text="${company.user.email}">company@test.com</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>

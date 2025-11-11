@@ -19,6 +19,9 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,20 +44,18 @@ public class SecurityConfig {
                                 AntPathRequestMatcher.antMatcher("/js/**"),
                                 AntPathRequestMatcher.antMatcher("/images/**")
                         ).permitAll()
-
                         .requestMatchers(
                                 AntPathRequestMatcher.antMatcher("/"),
                                 AntPathRequestMatcher.antMatcher("/register")
                         ).permitAll()
-
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/company/**")).hasRole("COMPANY")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resident/**")).hasRole("RESIDENT")
-
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .successHandler(customAuthenticationSuccessHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout

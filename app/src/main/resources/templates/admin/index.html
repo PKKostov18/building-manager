@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .stat-card {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card h2 {
+            font-weight: 600;
+            color: #4f46e5; /* Indigo color */
+            margin: 0;
+        }
+        .stat-card p {
+            font-size: 2.25rem; /* 36px */
+            font-weight: 700;
+            color: #111827;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div sec:authorize="isAuthenticated()">
+
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+
+        <div class="content-card">
+            <h1>Admin Dashboard</h1>
+            <p>
+                Welcome, <strong sec:authentication="name">Admin</strong>! This is your main control panel.
+            </p>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <h2>Total Companies</h2>
+                <p th:text="${totalCompanies}">0</p>
+            </div>
+            <div class="stat-card">
+                <h2>Total Users</h2>
+                <p th:text="${totalUsers}">0</p>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

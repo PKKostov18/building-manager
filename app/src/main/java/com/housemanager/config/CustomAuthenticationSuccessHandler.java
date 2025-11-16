@@ -28,9 +28,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (roles.contains("ROLE_ADMIN")) {
             targetUrl = "/admin";
         } else if (roles.contains("ROLE_COMPANY")) {
-            targetUrl = "/"; // TODO: Update when company dashboard exists
+            targetUrl = "/company";
+        } else if (roles.contains("ROLE_EMPLOYEE")) {
+            targetUrl = "/employee";
         } else if (roles.contains("ROLE_RESIDENT")) {
-            targetUrl = "/"; // TODO: Update when resident dashboard exists
+            targetUrl = "/resident";
         } else {
             targetUrl = "/";
         }

@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/company/**")).hasRole("COMPANY")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resident/**")).hasRole("RESIDENT")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/employee/**")).hasRole("EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -6,6 +6,7 @@
     <title>Login | House Manager</title>
 
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,42 +14,60 @@
 </head>
 <body>
 
-<div class="auth-container">
-    <div class="auth-card">
+<div class="login-container">
+    <div class="login-card">
 
-        <div class="auth-header">
-            <h1>Building Manager</h1>
-            <p>Sign in to your account</p>
+        <div class="branding-panel">
+            <i class="fas fa-building-user branding-icon"></i>
+            <h2>House Manager</h2>
+            <p>Your complete solution for property and resident management.</p>
         </div>
 
-        <div th:if="${param.error}" class="alert-error">
-            <p>Invalid username or password.</p>
+        <div class="form-panel">
+            <div class="auth-header">
+                <h1>Sign in to your account</h1>
+                <p>Welcome back! Please enter your details.</p>
+            </div>
+
+            <div th:if="${param.error}" class="alert-error">
+                <p>Invalid username or password.</p>
+            </div>
+            <div th:if="${param.logout}" class="alert-success">
+                <p>You have been logged out.</p>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autofocus class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required class="form-input">
+                </div>
+
+                <div class="form-options">
+                    <a href="#" class="form-link">Forgot password?</a>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        Sign In
+                    </button>
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <p>Don't have an account?
+                    <a href="#" class="form-link">Contact Admin</a>
+                </p>
+            </div>
         </div>
-        <div th:if="${param.logout}" class="alert-success">
-            <p>You have been logged out.</p>
-        </div>
-
-        <form th:action="@{/login}" method="post">
-            <input type="hidden"
-                   th:name="${_csrf.parameterName}"
-                   th:value="${_csrf.token}" />
-
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required autofocus class="form-input">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required class="form-input">
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">
-                    Sign In
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 

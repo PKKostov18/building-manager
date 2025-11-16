@@ -1,32 +1,111 @@
 /* Global styles & Font */
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f3f4f6;
+    background-color: #f3f4f6; /* Основен сив фон */
     margin: 0;
     padding: 0;
     color: #111827;
+
+    /* "Blob" фон */
+    position: relative;
+    overflow: hidden;
 }
 
-/* --- Login Page Styles --- */
+body::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background-image: radial-gradient(circle, rgba(167, 139, 250, 0.3), rgba(167, 139, 250, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
 
-.auth-container {
+body::after {
+    content: '';
+    position: absolute;
+    bottom: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background-image: radial-gradient(circle, rgba(96, 165, 250, 0.3), rgba(96, 165, 250, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.login-container {
     display: flex;
     min-height: 100vh;
     align-items: center;
     justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
-.auth-card {
+.login-card {
+    display: flex;
     width: 100%;
-    max-width: 28rem;
-    border-radius: 0.5rem;
+    max-width: 56rem;
+    border-radius: 0.75rem;
     background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.branding-panel {
+    flex: 1;
+    background-color: #4f46e5;
+    color: #ffffff;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.branding-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.branding-panel h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.branding-panel p {
+    font-size: 1rem;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.form-panel {
+    flex: 1;
+    padding: 3rem;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .branding-panel {
+        display: none;
+    }
+    .login-card {
+        flex-direction: column;
+        max-width: 28rem;
+    }
+    .form-panel {
+        padding: 2rem;
+    }
 }
 
 .auth-header {
-    text-align: center;
+    text-align: left;
 }
 
 .auth-header h1 {
@@ -62,12 +141,12 @@ body {
     color: #166534;
 }
 
-.auth-card form {
+.form-panel form {
     margin-top: 1.5rem;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .form-group label {
@@ -92,6 +171,29 @@ body {
     outline: none;
     border-color: #4f46e5;
     box-shadow: 0 0 0 2px #a5b4fc;
+}
+
+.form-options {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.25rem;
+}
+
+.form-link {
+    font-size: 0.875rem;
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+}
+.form-link:hover {
+    text-decoration: underline;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
 }
 
 .btn {

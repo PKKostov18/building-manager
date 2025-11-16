@@ -159,3 +159,36 @@ body {
     text-align: center;
     font-size: 0.875rem;
 }
+
+/* --- Media Queries for Responsive Design --- */
+
+@media (max-width: 768px) {
+
+    /* Hero секцията (по-малки текстове) */
+    .hero-title {
+        font-size: 2.5rem; /* Намаляваме от 3.75rem */
+    }
+
+    .hero-subtitle {
+        font-size: 1rem; /* Намаляваме от 1.25rem */
+    }
+
+    .hero-section,
+    .features-section,
+    .how-it-works-section {
+        padding: 4rem 0; /* Намаляваме padding-а на секциите */
+    }
+
+    /* ТОВА Е КЛЮЧОВАТА ПОПРАВКА:
+      Казваме на "Features" и "How It Works" да се подредят
+      в 1 колона, вместо в 3.
+    */
+    .features-grid,
+    .steps-container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 1.75rem; /* Намаляваме заглавията на секциите */
+    }
+}

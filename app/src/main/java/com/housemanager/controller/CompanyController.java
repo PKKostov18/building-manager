@@ -9,16 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/company")
 public class CompanyController {
 
-    // TODO: Инжектирай EmployeeRepository и BuildingRepository, за да показваш статистики
-
     @GetMapping
     public String showCompanyDashboard(Model model) {
-        // TODO: Добави статистики, напр. брой служители, брой сгради
-        // model.addAttribute("employeeCount", ...);
-        // model.addAttribute("buildingCount", ...);
-
         return "company/index";
     }
-
-    // Тук ще добавим по-късно /employees, /buildings и т.н.
 }

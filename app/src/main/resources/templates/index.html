@@ -4,26 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | House Manager</title>
+    <title>House Manager | Property Management Made Easy</title>
 
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/landing.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div sec:authorize="isAnonymous()">
-    <div class="anonymous-container">
-        <div class="anonymous-card">
-            <h1>Welcome!</h1>
-            <p>You are not logged in.</p>
-            <a th:href="@{/login}" class="btn btn-primary">
-                Click here to log in
+
+    <header class="hero-section">
+        <div class="hero-container">
+            <h1 class="hero-title">
+                The Future of Property Management is Here.
+            </h1>
+            <p class="hero-subtitle">
+                A single, powerful platform to manage buildings, track fees, and communicate with residents seamlessly.
+            </p>
+            <a th:href="@{/login}" class="hero-button">
+                Log In to Your Account
             </a>
         </div>
-    </div>
+    </header>
+
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Everything you need. All in one place.</h2>
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <i class="fas fa-building-user feature-icon"></i>
+                    <h3>Centralized Management</h3>
+                    <p>Manage multiple companies, employees, and buildings from a single admin dashboard.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-file-invoice-dollar feature-icon"></i>
+                    <h3>Automated Fee Calculation</h3>
+                    <p>Complex fee logic based on apartment area, residents, and elevator use, calculated automatically.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3>Resident Access</h3>
+                    <p>Provide residents with their own portal to view payment history and current dues (just like Livo).</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-container">
+                <div class="step-card">
+                    <span>1</span>
+                    <h3>Admin Creates Company</h3>
+                    <p>The platform Admin onboards a new property management company.</p>
+                </div>
+                <div class="step-card">
+                    <span>2</span>
+                    <h3>Company Manages Assets</h3>
+                    <p>The Company logs in to add their employees, buildings, and apartments.</p>
+                </div>
+                <div class="step-card">
+                    <span>3</span>
+                    <h3>Residents Get Access</h3>
+                    <p>The Company creates accounts for residents, who can then log in to view their fees.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Building Manager. All rights reserved.</p>
+        </div>
+    </footer>
+
 </div>
 
 </body>

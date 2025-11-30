@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Employees</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div sec:authorize="hasRole('COMPANY')">
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container">
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>My Employees</h1>
+                <a th:href="@{/company/employees/new}" class="btn-add">Add New Employee</a>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Username</th>
+                    <th>Assigned Buildings</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${employees.isEmpty()}">
+                    <td colspan="5" style="text-align: center;">No employees found.</td>
+                </tr>
+                <tr th:each="emp : ${employees}">
+                    <td th:text="${emp.name}">Name</td>
+                    <td th:text="${emp.email}">email@example.com</td>
+                    <td th:text="${emp.phoneNumber}">0888...</td>
+                    <td th:text="${emp.user.username}">user1</td>
+                    <td th:text="${emp.buildings.size()}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html>

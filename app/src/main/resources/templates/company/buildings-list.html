@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>My Buildings</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div sec:authorize="hasRole('COMPANY')">
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container">
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Managed Buildings</h1>
+                <a th:href="@{/company/buildings/new}" class="btn-add">Add New Building</a>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Floors</th>
+                    <th>Apts</th>
+                    <th>Built Area (sq.m)</th>
+                    <th>Assigned Employee</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${buildings.isEmpty()}">
+                    <td colspan="5" style="text-align: center;">No buildings added yet.</td>
+                </tr>
+                <tr th:each="b : ${buildings}">
+                    <td th:text="${b.address}">Address</td>
+                    <td th:text="${b.totalFloors}">0</td>
+                    <td th:text="${b.totalApartments}">0</td>
+                    <td th:text="${b.builtArea}">0.0</td>
+                    <td>
+                        <span th:if="${b.employee != null}" th:text="${b.employee.name}"
+                              style="color: #4f46e5; font-weight: 600;"></span>
+                        <span th:if="${b.employee == null}" style="color: #ef4444;">No Employee</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html>

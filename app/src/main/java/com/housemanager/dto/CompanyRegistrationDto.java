@@ -10,6 +10,10 @@ public class CompanyRegistrationDto {
     private String address;
     private String contactPerson;
 
+    private Double defaultTaxPerSqM;
+    private Double defaultElevatorTax;
+    private Double defaultPetTax;
+
     private String username;
     private String email;
     private String password;

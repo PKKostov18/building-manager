@@ -27,25 +27,33 @@
 
             <table>
                 <thead>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Bulstat</th>
-                    <th>Contact Person</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Bulstat</th>
+                        <th>Contact Person</th>
+                        <th>Tax (sq.m)</th>
+                        <th>Elevator</th>
+                        <th>Pet</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${companies.isEmpty()}">
-                    <td colspan="5" style="text-align: center;">No companies found.</td>
-                </tr>
-                <tr th:each="company : ${companies}">
-                    <td th:text="${company.name}">Test Company</td>
-                    <td th:text="${company.bulstat}">123456789</td>
-                    <td th:text="${company.contactPerson}">John Doe</td>
-                    <td th:text="${company.user.username}">company_user</td>
-                    <td th:text="${company.user.email}">company@test.com</td>
-                </tr>
+                    <tr th:if="${companies.isEmpty()}">
+                        <td colspan="8" style="text-align: center;">No companies found.</td>
+                    </tr>
+                    <tr th:each="company : ${companies}">
+                        <td th:text="${company.name}">Test Company</td>
+                        <td th:text="${company.bulstat}">123456789</td>
+                        <td th:text="${company.contactPerson}">John Doe</td>
+
+                        <td th:text="${#numbers.formatDecimal(company.defaultTaxPerSqM, 1, 'WHITESPACE', 2, 'POINT')} + ' lv'">0.00 lv</td>
+                        <td th:text="${#numbers.formatDecimal(company.defaultElevatorTax, 1, 'WHITESPACE', 2, 'POINT')} + ' lv'">0.00 lv</td>
+                        <td th:text="${#numbers.formatDecimal(company.defaultPetTax, 1, 'WHITESPACE', 2, 'POINT')} + ' lv'">0.00 lv</td>
+
+                        <td th:text="${company.user.username}">company_user</td>
+                        <td th:text="${company.user.email}">company@test.com</td>
+                    </tr>
                 </tbody>
             </table>
 

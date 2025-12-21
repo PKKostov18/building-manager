@@ -65,8 +65,11 @@ public class CompanyService {
         company.setAddress(dto.getAddress());
         company.setContactPerson(dto.getContactPerson());
 
-        company.setUser(user);
+        company.setDefaultTaxPerSqM(dto.getDefaultTaxPerSqM() != null ? dto.getDefaultTaxPerSqM() : 0.0);
+        company.setDefaultElevatorTax(dto.getDefaultElevatorTax() != null ? dto.getDefaultElevatorTax() : 0.0);
+        company.setDefaultPetTax(dto.getDefaultPetTax() != null ? dto.getDefaultPetTax() : 0.0);
 
+        company.setUser(user);
         companyRepository.save(company);
     }
 }

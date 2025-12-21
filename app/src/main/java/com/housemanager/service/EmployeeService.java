@@ -75,4 +75,9 @@ public class EmployeeService {
             }
         }
     }
+
+    public Employee findCurrentEmployee(String username) {
+        return employeeRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Employee profile not found for user: " + username));
+    }
 }

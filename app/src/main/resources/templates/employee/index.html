@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div sec:authorize="hasRole('EMPLOYEE')">
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container">
+        <div class="content-card">
+            <h1>Employee Dashboard</h1>
+            <p>
+                Welcome back, <strong th:text="${employee.name}">Employee</strong>!
+            </p>
+            <p>You are logged in as a staff member of <strong th:text="${employee.company.name}">Company</strong>.</p>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <h2>Assigned Buildings</h2>
+                <p th:text="${buildingsCount}">0</p>
+                <a th:href="@{/employee/buildings}" class="btn" style="margin-top: 1rem; background-color: #e5e7eb; color: #374151;">View Details</a>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.housemanager.controller;
 
 import com.housemanager.model.Building;
 import com.housemanager.service.BuildingService;
+import com.housemanager.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,8 @@ public class CompanyController {
     private BuildingService buildingService;
 
     @Autowired
-    private com.housemanager.service.EmployeeService employeeService;
+    private EmployeeService employeeService;
+
 
     @GetMapping
     public String showCompanyDashboard() {

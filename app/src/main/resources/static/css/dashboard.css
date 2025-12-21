@@ -172,3 +172,119 @@ table tr:nth-child(even) { background-color: #f9fafb; }
 .btn-add:hover {
     background-color: #16a34a;
 }
+
+/* --- Building Details Styles --- */
+
+/* Червеният банер за дългове */
+.debt-banner {
+    background-color: #ef4444; /* Червен цвят */
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+.debt-banner h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+}
+.debt-banner p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+/* Финансова карта */
+.finance-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.finance-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+.finance-row:last-child {
+    border-bottom: none;
+}
+.finance-label {
+    color: #374151;
+    font-weight: 500;
+}
+.finance-value {
+    font-weight: 700;
+    text-align: right;
+}
+.text-green { color: #10b981; }
+.text-red { color: #ef4444; }
+
+/* Решетка за апартаменти */
+.floor-section {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.floor-title {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.apartment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 в ред като на снимката */
+    gap: 0.75rem;
+}
+
+.apt-card {
+    background-color: #f3f4f6; /* Сив фон по подразбиране */
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.25rem;
+    text-align: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.1s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.apt-card:hover {
+    transform: translateY(-2px);
+}
+
+.apt-number {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+/* Статуси на апартаментите */
+.apt-status-ok {
+    background-color: #ecfdf5; /* Много светло зелено */
+    color: #059669;
+    border-color: #a7f3d0;
+}
+
+.apt-status-debt {
+    background-color: #fef2f2; /* Много светло червено */
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+/* Responsive adjustment */
+@media (min-width: 640px) {
+    .apartment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}

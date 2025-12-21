@@ -28,6 +28,8 @@
                        th:href="@{/company/employees}">Manage Employees</a>
                     <a sec:authorize="hasRole('RESIDENT')"
                        th:href="@{/resident/fees}">My Fees</a>
+                    <a sec:authorize="hasRole('EMPLOYEE')"
+                       th:href="@{/employee/buildings}">My Buildings</a>
 
                 </div>
             </div>

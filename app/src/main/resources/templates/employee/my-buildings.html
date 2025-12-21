@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>My Buildings</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div sec:authorize="hasRole('EMPLOYEE')">
+    <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+    <main class="container">
+        <div class="content-card">
+            <h1>My Assigned Buildings</h1>
+            <p>List of buildings you are responsible for managing.</p>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Floors</th>
+                    <th>Apartments</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${buildings.isEmpty()}">
+                    <td colspan="4" style="text-align: center;">You have no assigned buildings yet.</td>
+                </tr>
+                <tr th:each="b : ${buildings}">
+                    <td th:text="${b.address}">Address</td>
+                    <td th:text="${b.totalFloors}">0</td>
+                    <td th:text="${b.totalApartments}">0</td>
+                    <td>
+                        <a th:href="@{/employee/buildings/{id}(id=${b.id})}"
+                           class="btn"
+                           style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
+                            Manage
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

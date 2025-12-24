@@ -20,11 +20,13 @@ public class TaxService {
 
         total += apartment.getArea() * ratePerSqM;
 
-        long elevatorUsers = apartment.getResidents().stream()
-                .filter(r -> r.getAge() > 7 && r.isUsesElevator())
-                .count();
+        if (apartment.getResidents() != null) {
+            long elevatorUsers = apartment.getResidents().stream()
+                    .filter(r -> r.getAge() > 7 && r.isUsesElevator())
+                    .count();
 
-        total += elevatorUsers * rateElevator;
+            total += elevatorUsers * rateElevator;
+        }
 
         if (apartment.isHasPet()) {
             total += ratePet;

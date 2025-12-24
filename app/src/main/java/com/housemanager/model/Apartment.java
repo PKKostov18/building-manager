@@ -33,7 +33,7 @@ public class Apartment {
     private Building building;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_user_id", nullable = false)
+    @JoinColumn(name = "owner_user_id")
     private User owner;
 
     @OneToMany(

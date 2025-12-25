@@ -173,11 +173,8 @@ table tr:nth-child(even) { background-color: #f9fafb; }
     background-color: #16a34a;
 }
 
-/* --- Building Details Styles --- */
-
-/* Червеният банер за дългове */
 .debt-banner {
-    background-color: #ef4444; /* Червен цвят */
+    background-color: #ef4444;
     color: white;
     text-align: center;
     padding: 1rem;
@@ -196,7 +193,6 @@ table tr:nth-child(even) { background-color: #f9fafb; }
     opacity: 0.9;
 }
 
-/* Финансова карта */
 .finance-card {
     background-color: white;
     border-radius: 0.75rem;
@@ -225,7 +221,6 @@ table tr:nth-child(even) { background-color: #f9fafb; }
 .text-green { color: #10b981; }
 .text-red { color: #ef4444; }
 
-/* Решетка за апартаменти */
 .floor-section {
     margin-bottom: 2rem;
     text-align: center;
@@ -240,12 +235,12 @@ table tr:nth-child(even) { background-color: #f9fafb; }
 
 .apartment-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 в ред като на снимката */
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
 }
 
 .apt-card {
-    background-color: #f3f4f6; /* Сив фон по подразбиране */
+    background-color: #f3f4f6;
     border-radius: 0.5rem;
     padding: 0.75rem 0.25rem;
     text-align: center;
@@ -269,20 +264,58 @@ table tr:nth-child(even) { background-color: #f9fafb; }
     font-size: 1.125rem;
 }
 
-/* Статуси на апартаментите */
 .apt-status-ok {
-    background-color: #ecfdf5; /* Много светло зелено */
+    background-color: #ecfdf5;
     color: #059669;
     border-color: #a7f3d0;
 }
 
 .apt-status-debt {
-    background-color: #fef2f2; /* Много светло червено */
+    background-color: #fef2f2;
     color: #dc2626;
     border-color: #fecaca;
 }
 
-/* Responsive adjustment */
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: 1px solid #2563eb !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-primary:hover,
+a.btn-primary:hover,
+button.btn-primary:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
+
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: 1px solid #2563eb !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-primary:hover,
+a.btn-primary:hover,
+button.btn-primary:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
+
 @media (min-width: 640px) {
     .apartment-grid {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));

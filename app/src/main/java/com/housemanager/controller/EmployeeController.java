@@ -6,11 +6,10 @@ import com.housemanager.model.Employee;
 import com.housemanager.model.Resident;
 import com.housemanager.model.User;
 import com.housemanager.repository.ApartmentRepository;
-import com.housemanager.repository.ResidentRepository; // Добавете това
+import com.housemanager.repository.ResidentRepository;
 import com.housemanager.repository.UserRepository;
 import com.housemanager.service.EmployeeService;
 import com.housemanager.service.TaxService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -96,7 +95,12 @@ public class EmployeeController {
         }
 
         var apartmentsByFloor = apartmentDtos.stream()
-                .sorted(java.util.Comparator.comparing(dto -> dto.getApartment().getNumber()))
+                .sorted(java.util.Comparator.comparingInt(dto -> {
+                    String numStr = dto.getApartment().getNumber();
+                    String digitsOnly = numStr.replaceAll("[^0-9]", "");
+                    if (digitsOnly.isEmpty()) return 999999;
+                    return Integer.parseInt(digitsOnly);
+                }))
                 .collect(java.util.stream.Collectors.groupingBy(
                         dto -> dto.getApartment().getFloor(),
                         java.util.TreeMap::new,

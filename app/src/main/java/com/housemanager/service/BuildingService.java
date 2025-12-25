@@ -72,7 +72,7 @@ public class BuildingService {
             Apartment apt = new Apartment();
             apt.setNumber("Apt " + i);
             apt.setBuilding(building);
-            apt.setArea(65.00);
+            apt.setArea(0.00);
             apt.setHasPet(false);
 
             apt.setFloor(currentFloor);

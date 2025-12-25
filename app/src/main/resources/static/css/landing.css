@@ -18,7 +18,7 @@ body {
 }
 
 .section-title {
-    font-size: 2.25rem; /* 36px */
+    font-size: 2.25rem;
     font-weight: 700;
     text-align: center;
     margin-bottom: 3rem;
@@ -27,7 +27,7 @@ body {
 
 /* --- Hero Section --- */
 .hero-section {
-    background-color: #f3f4f6; /* Light gray background */
+    background-color: #f3f4f6;
     padding: 6rem 0;
     text-align: center;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 .hero-title {
-    font-size: 3.75rem; /* 60px */
+    font-size: 3.75rem;
     font-weight: 800;
     color: #111827;
     line-height: 1.2;
@@ -46,7 +46,7 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
     color: #4b5563;
     margin-bottom: 2.5rem;
     line-height: 1.6;
@@ -164,31 +164,26 @@ body {
 
 @media (max-width: 768px) {
 
-    /* Hero секцията (по-малки текстове) */
     .hero-title {
-        font-size: 2.5rem; /* Намаляваме от 3.75rem */
+        font-size: 2.5rem;
     }
 
     .hero-subtitle {
-        font-size: 1rem; /* Намаляваме от 1.25rem */
+        font-size: 1rem;
     }
 
     .hero-section,
     .features-section,
     .how-it-works-section {
-        padding: 4rem 0; /* Намаляваме padding-а на секциите */
+        padding: 4rem 0;
     }
 
-    /* ТОВА Е КЛЮЧОВАТА ПОПРАВКА:
-      Казваме на "Features" и "How It Works" да се подредят
-      в 1 колона, вместо в 3.
-    */
     .features-grid,
     .steps-container {
         grid-template-columns: 1fr;
     }
 
     .section-title {
-        font-size: 1.75rem; /* Намаляваме заглавията на секциите */
+        font-size: 1.75rem;
     }
 }

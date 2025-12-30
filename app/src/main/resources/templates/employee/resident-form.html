@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Resident</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <style>
+        .form-wrapper {
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+
+        .form-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            background: white;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: #4f46e5;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .input-group-text {
+            background-color: #f3f4f6;
+            border-right: none;
+            color: #6b7280;
+        }
+
+        .form-control {
+            border-left: none;
+            border-color: #d1d5db;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #4f46e5;
+            border-left: 1px solid #4f46e5;
+        }
+
+        .account-section {
+            background-color: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-submit {
+            background-color: #4f46e5;
+            border: none;
+            padding: 0.8rem;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
+
+<div class="container form-wrapper">
+
+    <a th:href="@{/employee/residents}" class="text-decoration-none text-muted mb-3 d-inline-block">
+        <i class="fas fa-arrow-left me-1"></i> Back to Directory
+    </a>
+
+    <div class="card form-card">
+        <div class="form-header">
+            <h2 class="m-0"><i class="fas fa-user-plus me-2"></i>New Resident</h2>
+            <p class="mb-0 opacity-75" style="font-size: 0.9rem;">Enter the resident's personal details below.</p>
+        </div>
+
+        <div class="form-body">
+            <form th:action="@{/employee/residents/add}" th:object="${residentDto}" method="post">
+
+                <div th:if="${errorMessage}" class="alert alert-danger shadow-sm border-0" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${errorMessage}">Error message</span>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-muted">First Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" th:field="*{firstName}" class="form-control" placeholder="John" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-muted">Last Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                            <input type="text" th:field="*{lastName}" class="form-control" placeholder="Doe" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-muted">Age</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                            <input type="number" th:field="*{age}" class="form-control" placeholder="30" min="0" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div class="form-check p-3 border rounded w-100 bg-light">
+                            <input class="form-check-input" type="checkbox" th:field="*{usesElevator}" id="elevatorCheck" style="cursor: pointer;">
+                            <label class="form-check-label fw-bold text-dark" for="elevatorCheck" style="cursor: pointer;">
+                                <i class="fas fa-elevator text-primary me-1"></i> Uses Elevator?
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="text-muted opacity-25">
+
+                <div class="form-check form-switch mb-3 ps-5">
+                    <input class="form-check-input" type="checkbox" th:field="*{createAccount}" id="createAccountCheck" onclick="toggleUserFields()" style="transform: scale(1.3); cursor: pointer;">
+                    <label class="form-check-label fw-bold ms-2" for="createAccountCheck">Create System User Account</label>
+                    <div class="form-text ms-2">Enable this if the resident needs login access (to pay bills, etc).</div>
+                </div>
+
+                <div id="userFieldsSection" class="account-section">
+                    <h6 class="mb-3 text-primary border-bottom pb-2"><i class="fas fa-user-lock me-1"></i> Account Credentials</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-at"></i></span>
+                            <input type="text" th:field="*{username}" id="inputUsername" class="form-control" placeholder="john.doe">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" th:field="*{email}" id="inputEmail" class="form-control" placeholder="john@example.com">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <input type="password" th:field="*{password}" id="inputPassword" class="form-control" placeholder="••••••••">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit mt-4">
+                    <i class="fas fa-save me-2"></i> Save Resident
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleUserFields() {
+        var checkbox = document.getElementById('createAccountCheck');
+        var userSection = document.getElementById('userFieldsSection');
+
+        var uName = document.getElementById('inputUsername');
+        var uPass = document.getElementById('inputPassword');
+        var uEmail = document.getElementById('inputEmail');
+
+        if (checkbox.checked) {
+            userSection.style.display = 'block';
+            uName.required = true;
+            uPass.required = true;
+            uEmail.required = true;
+        } else {
+            userSection.style.display = 'none';
+            uName.required = false;
+            uPass.required = false;
+            uEmail.required = false;
+
+            uName.value = '';
+            uPass.value = '';
+            uEmail.value = '';
+        }
+    }
+
+    window.onload = function() {
+        toggleUserFields();
+    };
+</script>
+</body>
+</html>

@@ -9,5 +9,6 @@ public class ApartmentConfigDto {
     private Long apartmentId;
     private Long ownerId;
     private boolean hasPet;
+    private Double area;
     private List<Long> residentIds;
 }

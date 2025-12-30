@@ -28,8 +28,6 @@ public class Resident {
     @Column(nullable = false)
     private boolean usesElevator;
 
-    private boolean isOwner;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

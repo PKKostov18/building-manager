@@ -65,10 +65,10 @@ public class EmployeeController {
 
         var apartments = apartmentRepository.findAllByBuilding(building);
 
-        List<User> allUsers = userRepository.findAll();
+        List<User> allUsers = userRepository.findAvailableOwners();
         model.addAttribute("allUsers", allUsers);
 
-        List<Resident> allResidents = residentRepository.findAll();
+        List<Resident> allResidents = residentRepository.findByUserIsNullAndApartmentIsNull();
         model.addAttribute("allResidents", allResidents);
 
         double totalCollected = 0.0;
@@ -121,6 +121,10 @@ public class EmployeeController {
     public String configureApartment(ApartmentConfigDto dto) {
         Apartment apt = apartmentRepository.findById(dto.getApartmentId()).orElseThrow();
 
+        if (dto.getArea() != null) {
+            apt.setArea(dto.getArea());
+        }
+
         User owner = userRepository.findById(dto.getOwnerId()).orElseThrow();
         apt.setOwner(owner);
         apt.setHasPet(dto.isHasPet());
@@ -129,6 +133,12 @@ public class EmployeeController {
         for (Resident r : currentResidents) {
             r.setApartment(null);
             residentRepository.save(r);
+        }
+
+        Resident ownerAsResident = residentRepository.findByUser(owner);
+        if (ownerAsResident != null) {
+            ownerAsResident.setApartment(apt);
+            residentRepository.save(ownerAsResident);
         }
 
         if (dto.getResidentIds() != null) {

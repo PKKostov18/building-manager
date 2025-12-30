@@ -197,7 +197,7 @@
     <select id="hiddenResidentsList" style="display:none;">
         <option th:each="res : ${allResidents}"
                 th:value="${res.id}"
-                th:text="${res.name} + ' (Age: ' + ${res.age} + ')'"></option>
+                th:text="${res.fullName} + ' (Age: ' + ${res.age} + ')'"></option>
     </select>
 
     <script>
@@ -223,6 +223,13 @@
             document.body.style.overflow = "auto";
         }
 
+        window.onclick = function(event) {
+            var modal = document.getElementById("configModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
         function generateResidentSelects() {
             const count = document.getElementById('residentsCount').value;
             const container = document.getElementById('dynamicResidentsContainer');
@@ -237,12 +244,19 @@
 
                 const label = document.createElement('label');
                 label.innerText = 'Resident #' + i;
-                label.style.fontSize = '0.9em';
 
                 const select = document.createElement('select');
                 select.name = 'residentIds';
+                select.className = 'resident-select';
+                select.style.width = '100%';
+                select.style.padding = '0.5rem';
+                select.style.border = '1px solid #d1d5db';
+                select.style.borderRadius = '0.375rem';
+
                 select.required = true;
-                select.innerHTML = '<option value="" disabled selected>Select person...</option>' + optionsHTML;
+                select.innerHTML = '<option value="" selected>Select person...</option>' + optionsHTML;
+
+                select.onchange = updateDropdownOptions;
 
                 div.appendChild(label);
                 div.appendChild(select);
@@ -250,11 +264,26 @@
             }
         }
 
-        window.onclick = function(event) {
-            var modal = document.getElementById("configModal");
-            if (event.target == modal) {
-                closeModal();
-            }
+        function updateDropdownOptions() {
+            const allSelects = document.querySelectorAll('.resident-select');
+
+            const selectedValues = Array.from(allSelects)
+                .map(s => s.value)
+                .filter(v => v !== "");
+
+            allSelects.forEach(select => {
+                const currentVal = select.value;
+
+                Array.from(select.options).forEach(option => {
+                    if (option.value === "") return;
+
+                    if (selectedValues.includes(option.value) && option.value !== currentVal) {
+                        option.style.display = "none";
+                    } else {
+                        option.style.display = "";
+                    }
+                });
+            });
         }
     </script>
 

@@ -20,16 +20,23 @@
                     <a sec:authorize="hasRole('COMPANY')" th:href="@{/company}">Home</a>
                     <a sec:authorize="hasRole('EMPLOYEE')" th:href="@{/employee}">Home</a>
                     <a sec:authorize="hasRole('RESIDENT')" th:href="@{/resident}">Home</a>
+
                     <a sec:authorize="hasRole('ADMIN')"
                        th:href="@{/admin/companies}">Manage Companies</a>
+
                     <a sec:authorize="hasRole('COMPANY')"
                        th:href="@{/company/buildings}">Manage Buildings</a>
                     <a sec:authorize="hasRole('COMPANY')"
                        th:href="@{/company/employees}">Manage Employees</a>
+
                     <a sec:authorize="hasRole('RESIDENT')"
                        th:href="@{/resident/fees}">My Fees</a>
+
                     <a sec:authorize="hasRole('EMPLOYEE')"
                        th:href="@{/employee/buildings}">My Buildings</a>
+
+                    <a sec:authorize="hasRole('EMPLOYEE')"
+                       th:href="@{/employee/residents}">Manage Residents</a>
 
                 </div>
             </div>

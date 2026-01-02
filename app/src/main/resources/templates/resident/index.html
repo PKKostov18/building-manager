@@ -26,7 +26,7 @@
             <i class="fas fa-exclamation-triangle fa-2x me-3 text-warning"></i>
             <div>
                 <h5 class="alert-heading fw-bold mb-1">Not Assigned Yet</h5>
-                <p class="mb-0">Your account is active, but you haven't been assigned to an apartment. Please contact your building manager to link your profile.</p>
+                <p class="mb-0">Your account is active, but you haven't been assigned to an apartment.</p>
             </div>
         </div>
 
@@ -81,8 +81,18 @@
                     </div>
                     <div class="card-body pt-0 d-flex flex-column justify-content-center align-items-center text-center">
 
+                        <div th:if="${success}" class="alert alert-success w-100 py-2 mb-2 shadow-sm border-0">
+                            <i class="fas fa-check-circle me-1"></i> <span th:text="${success}"></span>
+                        </div>
+                        <div th:if="${error}" class="alert alert-danger w-100 py-2 mb-2 shadow-sm border-0">
+                            <i class="fas fa-times-circle me-1"></i> <span th:text="${error}"></span>
+                        </div>
+
                         <div class="mb-3">
-                            <span class="text-muted">Based on your apartment config</span>
+                            <span class="text-muted text-uppercase fw-bold" style="font-size: 0.8rem;"
+                                  th:text="${#temporals.format(#temporals.createNow(), 'MMMM yyyy')}">
+                                JANUARY 2024
+                            </span>
                         </div>
 
                         <div class="display-4 fw-bold text-dark mb-3">
@@ -90,14 +100,23 @@
                             <span class="fs-4 text-muted">BGN</span>
                         </div>
 
-                        <div class="alert alert-info border-0 bg-info bg-opacity-10 text-info-emphasis w-100">
-                            <i class="fas fa-info-circle me-1"></i>
-                            Includes taxes for: Area, Elevator & Pets.
+                        <div th:if="${isPaid}" class="w-100">
+                            <div class="alert alert-success border-success bg-success bg-opacity-10 text-success fw-bold mb-0">
+                                <i class="fas fa-check-double me-2"></i> Paid for this month
+                            </div>
                         </div>
 
-                        <button class="btn btn-success w-100 py-2 fw-bold mt-2 shadow-sm">
-                            <i class="fas fa-credit-card me-2"></i> Pay Now (Demo)
-                        </button>
+                        <div th:unless="${isPaid}" class="w-100">
+                            <div class="alert alert-info border-0 bg-info bg-opacity-10 text-info-emphasis w-100 mb-3">
+                                <i class="fas fa-info-circle me-1"></i> Includes taxes for: Area, Elevator & Pets.
+                            </div>
+
+                            <button type="button" class="btn btn-success w-100 py-2 fw-bold shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#paymentConfirmationModal">
+                                <i class="fas fa-credit-card me-2"></i> Pay Now
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -164,43 +183,23 @@
                             </thead>
                             <tbody>
                             <tr th:if="${paymentHistory == null || paymentHistory.isEmpty()}">
-                                <td colspan="5" class="text-center py-4 text-muted">
+                                <td colspan="5" class="text-center py-5 text-muted">
                                     <i class="fas fa-receipt mb-2 d-block fa-lg"></i>
                                     No payments recorded yet.
                                 </td>
                             </tr>
-
                             <tr th:each="p : ${paymentHistory}">
                                 <td class="ps-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded p-2 me-3 text-secondary" style="width: 35px; height: 35px; display:flex; align-items:center; justify-content:center;">
-                                            <i class="fas fa-calendar-check"></i>
-                                        </div>
-                                        <span class="fw-bold text-dark" style="font-size: 0.95rem;"
-                                              th:text="${#temporals.format(p.paymentDate, 'dd MMM yyyy')}">
-                                            01 Jan 2024
-                                        </span>
-                                    </div>
+                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;" th:text="${#temporals.format(p.paymentDate, 'dd MMM yyyy')}">01 Jan</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-secondary bg-opacity-10 text-dark border" style="font-size: 0.85rem;">
-                                        <span th:text="${T(java.time.Month).of(p.forMonth).name()}">JANUARY</span>
-                                        <span th:text="${p.forYear}">2024</span>
+                                    <span class="badge bg-secondary bg-opacity-10 text-dark border">
+                                        <span th:text="${T(java.time.Month).of(p.forMonth).name()}">JAN</span> <span th:text="${p.forYear}">2024</span>
                                     </span>
                                 </td>
-                                <td class="fw-bold text-success">
-                                    <span th:text="${#numbers.formatDecimal(p.amount, 1, 2)}">50.00</span> BGN
-                                </td>
-                                <td>
-                                    <span th:if="${p.payer != null}" th:text="${p.payer.username}" class="small text-muted">User</span>
-                                    <span th:if="${p.payer == null}" class="small text-muted">-</span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <span class="badge bg-success bg-opacity-25 text-success-emphasis rounded-pill px-3 py-2 border border-success border-opacity-25"
-                                          style="font-size: 0.85rem;">
-                                        <i class="fas fa-check-circle me-1"></i> Paid
-                                    </span>
-                                </td>
+                                <td class="fw-bold text-success"><span th:text="${#numbers.formatDecimal(p.amount, 1, 2)}">50.00</span> BGN</td>
+                                <td><span th:text="${p.payer != null ? p.payer.username : '-'}">User</span></td>
+                                <td class="text-end pe-4"><span class="badge bg-success bg-opacity-25 text-success-emphasis rounded-pill">Paid</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -208,7 +207,40 @@
                 </div>
             </div>
 
-        </div> </div> </div>
+        </div> </div> <div class="modal fade" id="paymentConfirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Confirm Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-3 text-success">
+                    <i class="fas fa-coins fa-3x"></i>
+                </div>
+                <p class="mb-1 text-muted">You are about to pay the monthly fee of:</p>
+                <h3 class="fw-bold text-dark mb-3">
+                    <span th:text="${#numbers.formatDecimal(monthlyFee, 1, 2)}">55.00</span> BGN
+                </h3>
+                <p class="small text-muted mb-0">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer border-0 justify-  content-center pb-4">
+                <button type="button" class="btn btn-secondary fw-bold px-4" data-bs-dismiss="modal">
+                    Cancel
+                </button>
 
+                <form th:action="@{/resident/pay}" method="post">
+                    <button type="submit" class="btn btn-success fw-bold px-4 shadow-sm">
+                        Yes, Pay Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</div>
 </body>
 </html>

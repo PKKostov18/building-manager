@@ -1,6 +1,7 @@
 package com.housemanager.controller;
 
 import com.housemanager.dto.ApartmentConfigDto;
+import com.housemanager.dto.ApartmentViewDto;
 import com.housemanager.model.Apartment;
 import com.housemanager.model.Employee;
 import com.housemanager.model.Resident;
@@ -9,6 +10,7 @@ import com.housemanager.repository.ApartmentRepository;
 import com.housemanager.repository.ResidentRepository;
 import com.housemanager.repository.UserRepository;
 import com.housemanager.service.EmployeeService;
+import com.housemanager.service.PaymentService;
 import com.housemanager.service.TaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +33,7 @@ public class EmployeeController {
     @Autowired private ResidentRepository residentRepository;
     @Autowired private TaxService taxService;
     @Autowired private UserRepository userRepository;
+    @Autowired private PaymentService paymentService;
 
     @GetMapping
     public String showEmployeeDashboard(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -75,19 +78,23 @@ public class EmployeeController {
         double totalDebts = 0.0;
         int apartmentsWithDebtCount = 0;
 
-        java.util.List<com.housemanager.dto.ApartmentViewDto> apartmentDtos = new java.util.ArrayList<>();
+        List<ApartmentViewDto> apartmentDtos = new java.util.ArrayList<>();
 
         for (var apt : apartments) {
             double fee = taxService.calculateMonthlyFee(apt);
 
             boolean hasDebt = false;
-            if (apt.getOwner() != null) {
-                hasDebt = apt.getNumber().contains("1");
-                if (hasDebt) {
-                    totalDebts += fee;
-                    apartmentsWithDebtCount++;
-                } else {
+            boolean isOccupied = (apt.getOwner() != null || !apt.getResidents().isEmpty());
+
+            if (isOccupied && fee > 0) {
+                boolean isPaid = paymentService.isPaidForCurrentMonth(apt);
+
+                if (isPaid) {
                     totalCollected += fee;
+                } else {
+                    totalDebts += fee;
+                    hasDebt = true;
+                    apartmentsWithDebtCount++;
                 }
             }
 

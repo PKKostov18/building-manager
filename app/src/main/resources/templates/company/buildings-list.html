@@ -3,50 +3,179 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <head>
     <meta charset="UTF-8">
-    <title>My Buildings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managed Buildings</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Company Theme Colors */
+        .text-purple { color: #6366f1 !important; }
+        .bg-purple-subtle { background-color: #e0e7ff !important; color: #4338ca; }
+
+        .btn-purple {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            transition: all 0.2s;
+        }
+        .btn-purple:hover {
+            background-color: #4f46e5;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Table Styles */
+        .table thead th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+        .table tbody td {
+            vertical-align: middle;
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #1f2937; /* Dark gray text */
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* Action Buttons Hover Effect */
+        .btn-action:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 <body>
 
 <div sec:authorize="hasRole('COMPANY')">
+
     <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
 
-    <main class="container">
-        <div class="content-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1>Managed Buildings</h1>
-                <a th:href="@{/company/buildings/new}" class="btn-add">Add New Building</a>
+    <main class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">
+                    <i class="fas fa-city text-purple me-2"></i>Managed Buildings
+                </h2>
+                <p class="text-muted mb-0">Overview of all properties currently under management.</p>
+            </div>
+            <a th:href="@{/company/buildings/new}" class="btn btn-purple shadow-sm rounded-pill">
+                <i class="fas fa-plus me-2"></i> Add New Building
+            </a>
+        </div>
+
+        <div class="card shadow-sm border-0 overflow-hidden rounded-3">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th class="ps-4">Property Address</th>
+                        <th class="text-center">Floors</th> <th class="text-center">Apts</th>   <th class="text-center">Total Area</th>
+                        <th>Assigned Manager</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${buildings.isEmpty()}">
+                        <td colspan="6" class="text-center py-5">
+                            <div class="mb-3 text-muted opacity-25">
+                                <i class="fas fa-building fa-3x"></i>
+                            </div>
+                            <h6 class="fw-bold text-dark">No buildings found</h6>
+                            <p class="text-muted small mb-3">Start by adding your first property to the system.</p>
+                            <a th:href="@{/company/buildings/new}" class="btn btn-sm btn-outline-primary">Add Building</a>
+                        </td>
+                    </tr>
+
+                    <tr th:each="b : ${buildings}">
+
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-box bg-purple-subtle me-3">
+                                    <i class="fas fa-building text-purple"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark" th:text="${b.address}">Address</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="text-center fw-bold text-muted" th:text="${b.totalFloors}">2</td>
+
+                        <td class="text-center fw-bold text-muted" th:text="${b.totalApartments}">6</td>
+
+                        <td class="text-center">
+                            <span class="fw-bold text-dark" th:text="${b.builtArea}">250</span> <small class="text-muted">m²</small>
+                        </td>
+
+                        <td>
+                            <div th:if="${b.employee != null}" class="d-flex align-items-center">
+                                <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center me-2"
+                                     style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="fw-bold text-dark" style="font-size: 0.95rem;" th:text="${b.employee.name}">Name</span>
+                            </div>
+                            <div th:if="${b.employee == null}">
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10 px-3 py-2 rounded-pill">
+                                        Unassigned
+                                    </span>
+                            </div>
+                        </td>
+
+                        <td class="text-end pe-4">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-light btn-sm text-primary border btn-action" title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                <a href="#" class="btn btn-light btn-sm text-danger border btn-action" title="Remove"
+                                   onclick="return confirm('Are you sure you want to delete this building?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Address</th>
-                    <th>Floors</th>
-                    <th>Apts</th>
-                    <th>Built Area (sq.m)</th>
-                    <th>Assigned Employee</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${buildings.isEmpty()}">
-                    <td colspan="5" style="text-align: center;">No buildings added yet.</td>
-                </tr>
-                <tr th:each="b : ${buildings}">
-                    <td th:text="${b.address}">Address</td>
-                    <td th:text="${b.totalFloors}">0</td>
-                    <td th:text="${b.totalApartments}">0</td>
-                    <td th:text="${b.builtArea}">0.0</td>
-                    <td>
-                        <span th:if="${b.employee != null}" th:text="${b.employee.name}"
-                              style="color: #4f46e5; font-weight: 600;"></span>
-                        <span th:if="${b.employee == null}" style="color: #ef4444;">No Employee</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="card-footer bg-white py-3 border-top-0">
+                <small class="text-muted">Total Properties: <span class="fw-bold text-dark" th:text="${buildings.size()}">0</span></small>
+            </div>
         </div>
     </main>
+
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

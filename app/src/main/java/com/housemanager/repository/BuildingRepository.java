@@ -12,4 +12,5 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
 
     List<Building> findAllByCompany(Company company);
     boolean existsByAddressAndCompany(String address, Company company);
+    long countByCompany(Company company);
 }

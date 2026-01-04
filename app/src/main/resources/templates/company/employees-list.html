@@ -3,46 +3,188 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Employees</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Company Theme Colors (Purple/Indigo) */
+        .text-purple { color: #6366f1 !important; }
+        .bg-purple-subtle { background-color: #e0e7ff !important; color: #4338ca; }
+
+        .btn-purple {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            transition: all 0.2s;
+        }
+        .btn-purple:hover {
+            background-color: #4f46e5;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Table Styles */
+        .table thead th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+        .table tbody td {
+            vertical-align: middle;
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #1f2937;
+        }
+
+        /* Avatar Box */
+        .avatar-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; /* Кръгче */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .btn-action:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 <body>
 
 <div sec:authorize="hasRole('COMPANY')">
+
     <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
 
-    <main class="container">
-        <div class="content-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1>My Employees</h1>
-                <a th:href="@{/company/employees/new}" class="btn-add">Add New Employee</a>
+    <main class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">
+                    <i class="fas fa-users-cog text-purple me-2"></i>My Employees
+                </h2>
+                <p class="text-muted mb-0">Manage your staff and their building assignments.</p>
+            </div>
+            <a th:href="@{/company/employees/new}" class="btn btn-purple shadow-sm rounded-pill">
+                <i class="fas fa-user-plus me-2"></i> Add New Employee
+            </a>
+        </div>
+
+        <div class="card shadow-sm border-0 overflow-hidden rounded-3">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th class="ps-4">Employee Name</th>
+                        <th>Contact Details</th>
+                        <th>System Username</th>
+                        <th class="text-center">Assigned Buildings</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${employees.isEmpty()}">
+                        <td colspan="5" class="text-center py-5">
+                            <div class="mb-3 text-muted opacity-25">
+                                <i class="fas fa-user-tie fa-3x"></i>
+                            </div>
+                            <h6 class="fw-bold text-dark">No employees found</h6>
+                            <p class="text-muted small mb-3">Hire your first building manager to get started.</p>
+                            <a th:href="@{/company/employees/new}" class="btn btn-sm btn-outline-primary">Add Employee</a>
+                        </td>
+                    </tr>
+
+                    <tr th:each="emp : ${employees}">
+
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-box bg-purple-subtle me-3">
+                                    <i class="fas fa-user text-purple"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark" th:text="${emp.name}">Full Name</div>
+                                    <small class="text-muted">Manager</small>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="d-flex flex-column">
+                                    <span class="mb-1">
+                                        <i class="fas fa-envelope text-muted me-2 small"></i>
+                                        <span th:text="${emp.email}" class="text-dark">email@example.com</span>
+                                    </span>
+                                <span>
+                                        <i class="fas fa-phone text-muted me-2 small"></i>
+                                        <span th:text="${emp.phoneNumber}" class="text-muted small">0888...</span>
+                                    </span>
+                            </div>
+                        </td>
+
+                        <td>
+                                <span class="badge bg-light text-dark border fw-normal font-monospace">
+                                    <i class="fas fa-at text-secondary me-1"></i><span th:text="${emp.user.username}">user1</span>
+                                </span>
+                        </td>
+
+                        <td class="text-center">
+                                <span th:if="${emp.buildings.size() > 0}"
+                                      class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3 py-2 rounded-pill">
+                                    <span th:text="${emp.buildings.size()}">2</span> Active
+                                </span>
+                            <span th:if="${emp.buildings.size() == 0}"
+                                  class="badge bg-light text-muted border px-3 py-2 rounded-pill">
+                                    Idle (0)
+                                </span>
+                        </td>
+
+                        <td class="text-end pe-4">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-light btn-sm text-primary border btn-action" title="Edit Profile">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                <a href="#" class="btn btn-light btn-sm text-danger border btn-action" title="Fire / Delete"
+                                   onclick="return confirm('Are you sure you want to remove this employee?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Username</th>
-                    <th>Assigned Buildings</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${employees.isEmpty()}">
-                    <td colspan="5" style="text-align: center;">No employees found.</td>
-                </tr>
-                <tr th:each="emp : ${employees}">
-                    <td th:text="${emp.name}">Name</td>
-                    <td th:text="${emp.email}">email@example.com</td>
-                    <td th:text="${emp.phoneNumber}">0888...</td>
-                    <td th:text="${emp.user.username}">user1</td>
-                    <td th:text="${emp.buildings.size()}">0</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="card-footer bg-white py-3 border-top-0">
+                <small class="text-muted">Total Staff: <span class="fw-bold text-dark" th:text="${employees.size()}">0</span></small>
+            </div>
         </div>
     </main>
+
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

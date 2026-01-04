@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,60 +15,226 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
         }
-        .stat-card {
-            background-color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        .text-indigo { color: #4f46e5 !important; }
+        .bg-indigo { background-color: #4f46e5 !important; }
+
+        .bg-indigo-subtle {
+            background-color: #e0e7ff !important; /* Много светло индиго */
+            color: #4f46e5 !important;            /* Тъмно индиго за иконата */
         }
-        .stat-card h2 {
-            font-weight: 600;
-            color: #4f46e5; /* Indigo color */
-            margin: 0;
+
+        /* Стилове за картите */
+        .card-stat {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
         }
-        .stat-card p {
-            font-size: 2.25rem; /* 36px */
-            font-weight: 700;
-            color: #111827;
-            margin-top: 0.5rem;
+        .card-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
+        .stat-companies { border-left-color: #4f46e5; }
+        .stat-buildings { border-left-color: #0ea5e9; }
+        .stat-employees { border-left-color: #f59e0b; }
+        .stat-residents { border-left-color: #10b981; }
     </style>
 </head>
 <body>
 
-<div sec:authorize="isAuthenticated()">
+<div sec:authorize="hasRole('ADMIN')">
 
     <nav th:replace="~{fragments/navbar :: navbar-fragment}"></nav>
 
-    <main class="container" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+    <main class="container py-5">
 
-        <div class="content-card">
-            <h1>Admin Dashboard</h1>
-            <p>
-                Welcome, <strong sec:authentication="name">Admin</strong>! This is your main control panel.
-            </p>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">
+                    <i class="fas fa-chart-line text-indigo me-2"></i>System Overview
+                </h2>
+                <p class="text-muted mb-0">Welcome back, <strong sec:authentication="name" class="text-dark">Admin</strong>.</p>
+            </div>
         </div>
 
-        <div class="stat-grid">
-            <div class="stat-card">
-                <h2>Total Companies</h2>
-                <p th:text="${totalCompanies}">0</p>
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm card-stat stat-companies h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <p class="text-muted small text-uppercase fw-bold mb-1">Total Companies</p>
+                                <h2 class="fw-bold text-dark m-0" th:text="${totalCompanies}">0</h2>
+                            </div>
+
+                            <div class="rounded-circle p-2 bg-indigo-subtle d-flex align-items-center justify-content-center"
+                                 style="width: 45px; height: 45px;">
+                                <i class="fas fa-briefcase fa-lg"></i>
+                            </div>
+
+                        </div>
+                        <small class="text-success fw-bold"><i class="fas fa-check-circle small me-1"></i> System Active</small>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h2>Total Users</h2>
-                <p th:text="${totalUsers}">0</p>
+
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm card-stat stat-buildings h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <p class="text-muted small text-uppercase fw-bold mb-1">Managed Buildings</p>
+                                <h2 class="fw-bold text-dark m-0" th:text="${totalBuildings}">0</h2>
+                            </div>
+                            <div class="rounded-circle p-2 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                <i class="fas fa-city fa-lg"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Across all companies</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm card-stat stat-employees h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <p class="text-muted small text-uppercase fw-bold mb-1">Total Employees</p>
+                                <h2 class="fw-bold text-dark m-0" th:text="${totalEmployees}">0</h2>
+                            </div>
+                            <div class="rounded-circle p-2 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                <i class="fas fa-user-tie fa-lg"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Managers & Staff</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm card-stat stat-residents h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <p class="text-muted small text-uppercase fw-bold mb-1">Total Residents</p>
+                                <h2 class="fw-bold text-dark m-0" th:text="${totalResidents}">0</h2>
+                            </div>
+                            <div class="rounded-circle p-2 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                <i class="fas fa-users fa-lg"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Registered accounts</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 border-bottom-0 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold m-0 text-dark"><i class="fas fa-users-cog me-2 text-secondary"></i>User Management</h5>
+                <div class="input-group" style="width: 300px;">
+                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" class="form-control border-start-0 bg-light" placeholder="Search users...">
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-4 py-3">User</th>
+                            <th class="py-3">Role</th>
+                            <th class="py-3">Status</th>
+                            <th class="text-end pe-4 py-3">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 text-secondary fw-bold"
+                                         style="width: 40px; height: 40px; font-size: 0.9rem;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark" th:text="${user.username}">Username</div>
+                                        <div class="small text-muted" th:text="${user.email}">user@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div th:each="auth : ${user.authorities}">
+                                    <span th:if="${auth.authority == 'ROLE_ADMIN'}"
+                                          class="badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10 px-3">ADMIN</span>
+
+                                    <span th:if="${auth.authority == 'ROLE_COMPANY'}"
+                                          class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-3">COMPANY</span>
+
+                                    <span th:if="${auth.authority == 'ROLE_EMPLOYEE'}"
+                                          class="badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10 px-3 text-dark">EMPLOYEE</span>
+
+                                    <span th:if="${auth.authority == 'ROLE_RESIDENT'}"
+                                          class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3">RESIDENT</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:if="${user.enabled}" class="badge bg-light text-dark border">
+                                    <i class="fas fa-check-circle text-success me-1"></i> Active
+                                </span>
+                                <span th:unless="${user.enabled}" class="badge bg-light text-muted border">
+                                    <i class="fas fa-ban text-secondary me-1"></i> Inactive
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light text-muted me-1" title="Edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn btn-sm btn-light text-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white border-top-0 py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Showing all <span th:text="${users.size()}">0</span> users</small>
+
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0 gap-2">
+
+                            <li class="page-item disabled">
+                                <a class="page-link rounded-circle d-flex align-items-center justify-content-center border-0 bg-light text-muted"
+                                   href="#" aria-label="Previous" style="width: 32px; height: 32px;">
+                                    <i class="fas fa-chevron-left" style="font-size: 0.8rem;"></i>
+                                </a>
+                            </li>
+
+                            <li class="page-item active">
+                                <a class="page-link rounded-circle d-flex align-items-center justify-content-center border-0 shadow-sm"
+                                   href="#" style="width: 32px; height: 32px; background-color: #4f46e5;">1</a>
+                            </li>
+
+                            <li class="page-item disabled">
+                                <a class="page-link rounded-circle d-flex align-items-center justify-content-center border-0 bg-light text-muted"
+                                   href="#" aria-label="Next" style="width: 32px; height: 32px;">
+                                    <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
 
     </main>
-
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

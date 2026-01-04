@@ -1,6 +1,12 @@
 package com.housemanager.controller;
 
 import com.housemanager.model.Building;
+import com.housemanager.model.Company;
+import com.housemanager.model.User;
+import com.housemanager.repository.BuildingRepository;
+import com.housemanager.repository.CompanyRepository;
+import com.housemanager.repository.EmployeeRepository;
+import com.housemanager.repository.UserRepository;
 import com.housemanager.service.BuildingService;
 import com.housemanager.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +23,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/company")
 public class CompanyController {
 
-    @Autowired
-    private BuildingService buildingService;
-
-    @Autowired
-    private EmployeeService employeeService;
-
+    @Autowired private BuildingService buildingService;
+    @Autowired private EmployeeService employeeService;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CompanyRepository companyRepository;
+    @Autowired private BuildingRepository buildingRepository;
+    @Autowired private EmployeeRepository employeeRepository;
 
     @GetMapping
-    public String showCompanyDashboard() {
+    public String showCompanyDashboard(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Company company = companyRepository.findByUser(user);
+
+        if (company != null) {
+            long totalBuildings = buildingRepository.countByCompany(company);
+            long totalEmployees = employeeRepository.countByCompany(company);
+
+            model.addAttribute("company", company);
+            model.addAttribute("totalBuildings", totalBuildings);
+            model.addAttribute("totalEmployees", totalEmployees);
+        }
+
         return "company/index";
     }
 
@@ -48,8 +68,6 @@ public class CompanyController {
         buildingService.createBuilding(building, userDetails.getUsername());
         return "redirect:/company/buildings";
     }
-
-    // --- Employee Management ---
 
     @GetMapping("/employees")
     public String showEmployees(Model model, @AuthenticationPrincipal UserDetails userDetails) {

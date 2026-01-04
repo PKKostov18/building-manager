@@ -125,26 +125,46 @@
 
                         <td>
                             <div class="d-flex gap-2">
-                                    <span class="badge bg-light text-dark border fw-normal" title="Tax per Sq.M">
-                                        <i class="fas fa-ruler-combined text-primary me-1"></i>
-                                        <span th:text="${#numbers.formatDecimal(company.defaultTaxPerSqM, 1, 2)}">0.50</span>
-                                    </span>
-                                <span class="badge bg-light text-dark border fw-normal" title="Elevator Tax">
-                                        <i class="fas fa-elevator text-secondary me-1"></i>
-                                        <span th:text="${#numbers.formatDecimal(company.defaultElevatorTax, 1, 2)}">5.00</span>
-                                    </span>
-                                <span class="badge bg-light text-dark border fw-normal" title="Pet Tax">
-                                        <i class="fas fa-paw text-warning me-1"></i>
-                                        <span th:text="${#numbers.formatDecimal(company.defaultPetTax, 1, 2)}">3.00</span>
-                                    </span>
+                                <span class="badge bg-light text-dark border fw-normal py-2 px-3"
+                                      style="font-size: 0.9rem;"
+                                      title="Tax per Sq.M">
+                                    <i class="fas fa-ruler-combined text-primary me-1"></i>
+                                    <span th:text="${#numbers.formatDecimal(company.defaultTaxPerSqM, 1, 2)}">0.50</span>
+                                </span>
+
+                                <span class="badge bg-light text-dark border fw-normal py-2 px-3"
+                                      style="font-size: 0.9rem;"
+                                      title="Elevator Tax">
+                                    <i class="fas fa-elevator text-secondary me-1"></i>
+                                    <span th:text="${#numbers.formatDecimal(company.defaultElevatorTax, 1, 2)}">5.00</span>
+                                </span>
+
+                                <span class="badge bg-light text-dark border fw-normal py-2 px-3"
+                                      style="font-size: 0.9rem;"
+                                      title="Pet Tax">
+                                    <i class="fas fa-paw text-warning me-1"></i>
+                                    <span th:text="${#numbers.formatDecimal(company.defaultPetTax, 1, 2)}">3.00</span>
+                                </span>
                             </div>
                         </td>
 
                         <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-light text-muted me-1 border" title="Edit Company">
-                                <i class="fas fa-pen"></i>
-                            </button>
+                            <div class="d-inline-flex gap-1">
+                                <a th:href="@{/admin/companies/edit/{id}(id=${company.id})}"
+                                   class="btn btn-sm btn-light text-muted border"
+                                   title="Edit Company">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                <form th:action="@{/admin/companies/delete/{id}(id=${company.id})}" method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this company? All associated buildings and employees will be affected.');">
+                                    <button type="submit" class="btn btn-sm btn-light text-danger border" title="Delete Company">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -160,7 +180,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Инициализация на Tooltips за баджовете с таксите
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)

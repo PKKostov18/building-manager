@@ -2,6 +2,7 @@ package com.housemanager.repository;
 
 import com.housemanager.model.Building;
 import com.housemanager.model.Company;
+import com.housemanager.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,5 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
     List<Building> findAllByCompany(Company company);
     boolean existsByAddressAndCompany(String address, Company company);
     long countByCompany(Company company);
+    List<Building> findByEmployee(Employee employee);
 }

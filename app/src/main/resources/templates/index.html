@@ -4,90 +4,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House Manager | Property Management Made Easy</title>
+    <title>Building Manager | Modern Property Management</title>
 
-    <link rel="stylesheet" th:href="@{/css/landing.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary-color: #1e293b;
+            --accent-bg: #e0e7ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #f1f5f9;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--secondary-color) !important;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #64748b !important;
+            transition: color 0.2s;
+            margin-left: 1rem;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.2s;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+            color: white;
+        }
+        .btn-outline-custom {
+            border: 2px solid #e2e8f0;
+            color: var(--secondary-color);
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.2s;
+            background: white;
+        }
+        .btn-outline-custom:hover {
+            border-color: var(--secondary-color);
+            background-color: #f8fafc;
+        }
+
+        .hero-section {
+            padding: 10rem 0 8rem 0;
+            background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-blob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(79,70,229,0.07) 0%, rgba(255,255,255,0) 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            height: 100%;
+            text-align: left;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent-bg);
+        }
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+        }
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-bg);
+            -webkit-text-stroke: 2px var(--primary-color);
+            line-height: 1;
+            min-width: 60px;
+            margin-right: 1rem;
+        }
+        .step-content h5 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .footer {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            padding: 5rem 0;
+        }
+        .footer h5 {
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #ffffff;
+        }
+        .footer .text-muted {
+            color: #94a3b8 !important;
+        }
+        .footer p {
+            color: #cbd5e1;
+        }
+        .footer-bottom-text {
+            color: #64748b;
+        }
+
+    </style>
 </head>
 <body>
 
+<div sec:authorize="isAuthenticated()">
+    <script th:inline="javascript">
+        window.location.href = '/login-success';
+    </script>
+</div>
+
 <div sec:authorize="isAnonymous()">
 
-    <header class="hero-section">
-        <div class="hero-container">
-            <h1 class="hero-title">
-                The Future of Property Management is Here.
-            </h1>
-            <p class="hero-subtitle">
-                A single, powerful platform to manage buildings, track fees, and communicate with residents seamlessly.
-            </p>
-            <a th:href="@{/login}" class="hero-button">
-                Log In to Your Account
-            </a>
-        </div>
-    </header>
-
-    <section class="features-section">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <h2 class="section-title">Everything you need. All in one place.</h2>
-            <div class="features-grid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-building me-2" style="color: var(--primary-color);"></i>BuildingManager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How it Works</a></li>
+                    <li class="nav-item ms-3">
+                        <a th:href="@{/login}" class="btn btn-primary-custom py-2 px-4 rounded-3" style="border-radius: 8px;">
+                            <i class="fas fa-sign-in-alt me-2"></i>Log In
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-                <div class="feature-card">
-                    <i class="fas fa-building-user feature-icon"></i>
-                    <h3>Centralized Management</h3>
-                    <p>Manage multiple companies, employees, and buildings from a single admin dashboard.</p>
+    <section class="hero-section d-flex align-items-center justify-content-center">
+        <div class="hero-blob"></div>
+        <div class="container position-relative z-1">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+
+                    <div class="d-inline-block badge bg-white border shadow-sm px-3 py-2 rounded-pill fw-bold mb-4 text-indigo"
+                         style="color: var(--primary-color);">
+                        <i class="fas fa-star text-warning me-1"></i> #1 Property Management Tool
+                    </div>
+
+                    <h1 class="hero-title">
+                        Property Management, <br>
+                        <span style="color: var(--primary-color);">Simplified.</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Stop using spreadsheets. Automate fees, manage buildings, and connect with residents
+                        through a single, powerful platform designed for modern managers.
+                    </p>
+
+                    <div class="d-flex gap-3 justify-content-center mb-5">
+                        <a th:href="@{/login}" class="btn btn-primary-custom btn-lg shadow">Get Started Now</a>
+                        <a href="#features" class="btn btn-outline-custom btn-lg">View Features</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-4 text-muted small fw-bold">
+                        <span><i class="fas fa-check-circle text-success me-2"></i>No credit card required</span>
+                        <span><i class="fas fa-check-circle text-success me-2"></i>Instant setup</span>
+                        <span><i class="fas fa-check-circle text-success me-2"></i>Free updates</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-white border-bottom">
+        <div class="container">
+            <div class="row text-center">
+
+                <div class="col-6 col-md-3 mb-4 mb-md-0">
+                    <h2 class="fw-bolder text-dark mb-0 display-6">500+</h2>
+                    <small class="text-uppercase text-muted fw-bold" style="letter-spacing: 1px; font-size: 0.75rem;">Buildings Managed</small>
                 </div>
 
-                <div class="feature-card">
-                    <i class="fas fa-file-invoice-dollar feature-icon"></i>
-                    <h3>Automated Fee Calculation</h3>
-                    <p>Complex fee logic based on apartment area, residents, and elevator use, calculated automatically.</p>
+                <div class="col-6 col-md-3 mb-4 mb-md-0">
+                    <h2 class="fw-bolder text-dark mb-0 display-6">12k+</h2>
+                    <small class="text-uppercase text-muted fw-bold" style="letter-spacing: 1px; font-size: 0.75rem;">Happy Residents</small>
                 </div>
 
-                <div class="feature-card">
-                    <i class="fas fa-users feature-icon"></i>
-                    <h3>Resident Access</h3>
-                    <p>Provide residents with their own portal to view payment history and current dues (just like Livo).</p>
+                <div class="col-6 col-md-3">
+                    <h2 class="fw-bolder text-dark mb-0 display-6">100%</h2>
+                    <small class="text-uppercase text-muted fw-bold" style="letter-spacing: 1px; font-size: 0.75rem;">Transparency</small>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <h2 class="fw-bolder text-dark mb-0 display-6">24/7</h2>
+                    <small class="text-uppercase text-muted fw-bold" style="letter-spacing: 1px; font-size: 0.75rem;">System Uptime</small>
                 </div>
 
             </div>
         </div>
     </section>
 
-    <section class="how-it-works-section">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <div class="steps-container">
-                <div class="step-card">
-                    <span>1</span>
-                    <h3>Admin Creates Company</h3>
-                    <p>The platform Admin onboards a new property management company.</p>
+    <section id="features" class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h6 class="text-uppercase text-muted fw-bold" style="letter-spacing: 2px; font-size: 0.8rem;">Why Choose Us</h6>
+                <h2 class="fw-bold display-5 mb-3 text-dark">Everything you need</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">
+                    We handle the complex stuff so you can focus on growing your portfolio.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Centralized Dashboard</h4>
+                        <p class="text-muted">
+                            Track finances, occupancy rates, and employee tasks from one high-level view. Real-time data at your fingertips.
+                        </p>
+                    </div>
                 </div>
-                <div class="step-card">
-                    <span>2</span>
-                    <h3>Company Manages Assets</h3>
-                    <p>The Company logs in to add their employees, buildings, and apartments.</p>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h4>Smart Fee Calculation</h4>
+                        <p class="text-muted">
+                            Set rules for elevator usage, pet taxes, and area-based fees. The system generates monthly bills automatically.
+                        </p>
+                    </div>
                 </div>
-                <div class="step-card">
-                    <span>3</span>
-                    <h3>Residents Get Access</h3>
-                    <p>The Company creates accounts for residents, who can then log in to view their fees.</p>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-mobile-screen"></i>
+                        </div>
+                        <h4>Resident Portal</h4>
+                        <p class="text-muted">
+                            Residents get their own login to view payment history and upcoming dues. Transparency builds trust.
+                        </p>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-5" style="background-color: #f8fafc;">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-5">
+                    <h2 class="fw-bold display-6 mb-4 text-dark">Getting started is easier than you think.</h2>
+                    <p class="text-muted mb-5">
+                        We've streamlined the process so you can start managing properties in minutes, not days.
+                    </p>
+
+                    <div class="d-flex flex-column">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5>Register Company</h5>
+                                <p class="text-muted m-0">Create your management company profile and set your default tax rates.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5>Add Buildings & Staff</h5>
+                                <p class="text-muted m-0">Input building details and assign managers to specific properties.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5>Onboard Residents</h5>
+                                <p class="text-muted m-0">Add apartments and invite residents to the platform.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6 offset-lg-1 mt-5 mt-lg-0">
+                    <div class="bg-white p-4 rounded-4 shadow-lg border">
+                        <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                            <div class="rounded-circle bg-danger p-2 me-2" style="width: 10px; height: 10px;"></div>
+                            <div class="rounded-circle bg-warning p-2 me-2" style="width: 10px; height: 10px;"></div>
+                            <div class="rounded-circle bg-success p-2" style="width: 10px; height: 10px;"></div>
+                        </div>
+                        <div class="p-3 bg-light rounded-3 mb-3 border">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-dark small">Villa Roses</span>
+                                <span class="badge bg-success small">Active</span>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.75rem;">Total Residents: 42</small>
+                        </div>
+                        <div class="p-3 bg-light rounded-3 mb-3 border">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-dark small">Green Park View</span>
+                                <span class="badge bg-warning text-dark small">Pending Audit</span>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.75rem;">Total Residents: 128</small>
+                        </div>
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-dark small">Sunset Blvd</span>
+                                <span class="badge bg-success small">Active</span>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.75rem;">Total Residents: 15</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dark" style="background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);">
+        <div class="container py-5 text-center">
+            <h2 class="text-white fw-bold mb-3 display-6">Ready to streamline your property management?</h2>
+            <p class="text-white-50 mb-5 fs-5">Join thousands of managers who trust HouseManager.</p>
+            <a th:href="@{/login}" class="btn btn-light text-primary fw-bold px-5 py-3 rounded-pill shadow-lg">
+                Log In Now
+            </a>
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Building Manager. All rights reserved.</p>
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5 class="mb-3 text-white"><i class="fas fa-building me-2"></i>BuildingManager</h5>
+                    <p class="text-white-50">Making property management effortless, transparent, and efficient for everyone involved.</p>
+                </div>
+                <div class="col-md-2 offset-md-2">
+                    <h5 class="text-white">Platform</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Features</a></li>
+                        <li class="mb-2"><a href="#">Pricing</a></li>
+                        <li class="mb-2"><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5 class="text-white">Company</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="#">Careers</a></li>
+                        <li class="mb-2"><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5 class="text-white">Legal</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Privacy</a></li>
+                        <li class="mb-2"><a href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top border-secondary mt-5 pt-4 text-center">
+                <small class="text-white-50 footer-bottom-text">&copy; 2026 Building Manager Inc. All rights reserved.</small>
+            </div>
         </div>
     </footer>
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

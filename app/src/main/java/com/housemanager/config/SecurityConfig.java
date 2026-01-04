@@ -16,14 +16,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    @Autowired private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    @Autowired private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    @Bean public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -2,7 +2,7 @@ package com.housemanager.controller;
 
 import com.housemanager.dto.CompanyRegistrationDto;
 import com.housemanager.model.User;
-import com.housemanager.repository.BuildingRepository; // <--- НОВО
+import com.housemanager.repository.BuildingRepository;
 import com.housemanager.repository.CompanyRepository;
 import com.housemanager.repository.UserRepository;
 import com.housemanager.service.CompanyService;
@@ -20,17 +20,10 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private CompanyRepository companyRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BuildingRepository buildingRepository;
+    @Autowired private CompanyService companyService;
+    @Autowired private CompanyRepository companyRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private BuildingRepository buildingRepository;
 
     @GetMapping
     public String showAdminIndex(Model model) {

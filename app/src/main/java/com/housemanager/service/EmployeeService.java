@@ -14,23 +14,12 @@ import java.util.Set;
 @Service
 public class EmployeeService {
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private BuildingRepository buildingRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private CompanyRepository companyRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
+    @Autowired private BuildingRepository buildingRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     public List<Employee> findEmployeesByCompanyUser(String companyUsername) {
         Company company = companyRepository.findByUser_Username(companyUsername)

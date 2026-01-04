@@ -3,7 +3,7 @@ package com.housemanager.controller;
 import com.housemanager.dto.ApartmentConfigDto;
 import com.housemanager.dto.ApartmentViewDto;
 import com.housemanager.model.Apartment;
-import com.housemanager.model.Building; // Добавен импорт
+import com.housemanager.model.Building;
 import com.housemanager.model.Employee;
 import com.housemanager.model.Resident;
 import com.housemanager.model.User;
@@ -36,41 +36,32 @@ public class EmployeeController {
     @Autowired private UserRepository userRepository;
     @Autowired private PaymentService paymentService;
 
-    // --- ОБНОВЕН МЕТОД ЗА DASHBOARD ---
     @GetMapping
     public String showEmployeeDashboard(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        // 1. Намираме текущия служител
         Employee employee = employeeService.findCurrentEmployee(userDetails.getUsername());
         List<Building> myBuildings = employee.getBuildings();
 
-        // 2. Инициализираме променливи за статистика
         int totalApartments = 0;
         int totalResidents = 0;
         double totalCollected = 0.0;
         double totalExpected = 0.0;
 
-        // 3. Завъртаме цикъл през всички сгради на служителя
         for (Building b : myBuildings) {
-            // Взимаме апартаментите от базата, за да е сигурно зареждането
             List<Apartment> apartments = apartmentRepository.findAllByBuilding(b);
             totalApartments += apartments.size();
 
             for (Apartment apt : apartments) {
-                // Броим жителите
                 if (apt.getResidents() != null) {
                     totalResidents += apt.getResidents().size();
                 }
 
-                // Изчисляваме финансите
                 double fee = taxService.calculateMonthlyFee(apt);
 
-                // Смятаме, че апартаментът е "активен", ако има собственик или жители
                 boolean isOccupied = (apt.getOwner() != null || (apt.getResidents() != null && !apt.getResidents().isEmpty()));
 
                 if (isOccupied && fee > 0) {
-                    totalExpected += fee; // Това трябва да се събере
+                    totalExpected += fee;
 
-                    // Проверяваме дали е платено
                     if (paymentService.isPaidForCurrentMonth(apt)) {
                         totalCollected += fee;
                     }
@@ -78,14 +69,11 @@ public class EmployeeController {
             }
         }
 
-        // Изчисляваме % събраемост (защита от делене на 0)
         double collectionRate = (totalExpected > 0) ? (totalCollected / totalExpected) * 100 : 0;
 
-        // 4. Подаваме данните към HTML
         model.addAttribute("employee", employee);
         model.addAttribute("buildingsCount", myBuildings.size());
 
-        // Нови данни за разширеното табло
         model.addAttribute("totalApartments", totalApartments);
         model.addAttribute("totalResidents", totalResidents);
         model.addAttribute("totalCollected", totalCollected);
@@ -94,8 +82,6 @@ public class EmployeeController {
 
         return "employee/index";
     }
-
-    // --- ОСТАНАЛИТЕ МЕТОДИ СИ ОСТАВАТ СЪЩИТЕ ---
 
     @GetMapping("/buildings")
     public String showMyBuildings(Model model, @AuthenticationPrincipal UserDetails userDetails) {

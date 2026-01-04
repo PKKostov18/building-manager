@@ -25,20 +25,11 @@ import java.util.List;
 @RequestMapping("/resident")
 public class ResidentController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ResidentRepository residentRepository;
-
-    @Autowired
-    private TaxService taxService;
-
-    @Autowired
-    private PaymentRepository paymentRepository;
-
-    @Autowired
-    private PaymentService paymentService;
+    @Autowired private UserRepository userRepository;
+    @Autowired private ResidentRepository residentRepository;
+    @Autowired private TaxService taxService;
+    @Autowired private PaymentRepository paymentRepository;
+    @Autowired private PaymentService paymentService;
 
     @GetMapping
     public String showDashboard(Model model, @AuthenticationPrincipal UserDetails userDetails) {

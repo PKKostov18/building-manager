@@ -15,4 +15,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmailAndCompany(String email, Company company);
     long countByCompany(Company company);
     Optional<Employee> findByUser_Username(String username);
+    List<Employee> findByCompany(Company company);
 }

@@ -14,4 +14,5 @@ public interface ResidentRepository extends JpaRepository<Resident, Long> {
     List<Resident> findAllByApartment(Apartment apartment);
     List<Resident> findByUserIsNullAndApartmentIsNull();
     Resident findByUser(User user);
+    List<Resident> findByApartment(Apartment apartment);
 }

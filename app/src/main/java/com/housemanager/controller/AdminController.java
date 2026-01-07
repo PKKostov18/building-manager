@@ -13,10 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -104,6 +101,19 @@ public class AdminController {
             model.addAttribute("error", ex.getMessage());
             return "admin/create-company";
         }
+        return "redirect:/admin/companies";
+    }
+
+    @PostMapping("/companies/delete/{id}")
+    public String deleteCompany(@PathVariable Long id) {
+        companyService.deleteCompany(id);
+        return "redirect:/admin/companies";
+    }
+
+    @PostMapping("/companies/update/{id}")
+    public String updateCompany(@PathVariable Long id,
+                                @ModelAttribute CompanyRegistrationDto companyDto) {
+        companyService.updateCompany(id, companyDto);
         return "redirect:/admin/companies";
     }
 }

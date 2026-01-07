@@ -15,4 +15,5 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
     boolean existsByAddressAndCompany(String address, Company company);
     long countByCompany(Company company);
     List<Building> findByEmployee(Employee employee);
+    List<Building> findByCompany(Company company);
 }

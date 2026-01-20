@@ -29,14 +29,9 @@ public class Employee {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @OneToMany(
-            mappedBy = "employee",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Building> buildings = new ArrayList<>();
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    private List<Building> buildings;
 
-    // Връзка към User акаунта на служителя
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;

@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
-    @Query("SELECT u FROM User u WHERE u.isResident = true AND u.id NOT IN (SELECT a.owner.id FROM Apartment a WHERE a.owner IS NOT NULL)")
+    List<User> findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(String username, String email);
+    @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT a.owner.id FROM Apartment a WHERE a.owner IS NOT NULL)")
     List<User> findAvailableOwners();
 }

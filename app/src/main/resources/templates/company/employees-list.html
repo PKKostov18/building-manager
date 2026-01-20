@@ -9,64 +9,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .text-purple { color: #6366f1 !important; }
         .bg-purple-subtle { background-color: #e0e7ff !important; color: #4338ca; }
 
-        .btn-purple {
-            background-color: #6366f1;
-            color: white;
-            border: none;
-            font-weight: 600;
-            padding: 0.5rem 1.2rem;
-            transition: all 0.2s;
-        }
-        .btn-purple:hover {
-            background-color: #4f46e5;
-            color: white;
-            transform: translateY(-1px);
-        }
+        .btn-purple { background-color: #6366f1; color: white; border: none; font-weight: 600; padding: 0.5rem 1.2rem; }
+        .btn-purple:hover { background-color: #4f46e5; color: white; transform: translateY(-1px); }
 
         .table thead th {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #6b7280;
-            background-color: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 1rem;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+            color: #6b7280; background-color: #f9fafb; border-bottom: 1px solid #e5e7eb; padding: 1rem;
         }
         .table tbody td {
-            vertical-align: middle;
-            padding: 1rem;
-            border-bottom: 1px solid #f3f4f6;
-            color: #1f2937;
+            vertical-align: middle !important; padding: 1rem; border-bottom: 1px solid #f3f4f6; color: #1f2937;
         }
 
         .avatar-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
         }
 
-        .btn-action:hover {
-            background-color: #f3f4f6;
-            transform: translateY(-1px);
+        .edit-mode { display: none; }
+
+        .table-input {
+            width: 100%; padding: 2px 0; margin: 0;
+            border: 1px solid transparent; background-color: transparent;
+            color: inherit; font-family: inherit; font-size: inherit; font-weight: 600;
+            line-height: inherit; box-shadow: none; transition: all 0.2s;
         }
+        .table-input:focus {
+            outline: none; border-bottom: 2px solid #6366f1;
+            background-color: rgba(255, 255, 255, 0.8); border-radius: 0; padding-left: 5px;
+        }
+        .text-center .table-input { text-align: center; }
+
+        a.sort-link { text-decoration: none; color: inherit; display: block; }
+        a.sort-link:hover { color: #4f46e5; }
     </style>
 </head>
 <body>
@@ -89,83 +71,144 @@
             </a>
         </div>
 
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-3">
+                <form th:action="@{/company/employees}" method="get" class="d-flex gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0"
+                               name="keyword"
+                               placeholder="Search employees by name..."
+                               th:value="${keyword}">
+                    </div>
+                    <button type="submit" class="btn btn-purple px-4">Search</button>
+
+                    <a th:if="${keyword != null && !keyword.isEmpty()}"
+                       th:href="@{/company/employees}"
+                       class="btn btn-outline-secondary px-3" title="Clear Search">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </form>
+            </div>
+        </div>
+
         <div class="card shadow-sm border-0 overflow-hidden rounded-3">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead>
+                    <thead class="bg-light">
                     <tr>
-                        <th class="ps-4">Employee Name</th>
+                        <th class="ps-4">
+                            <a th:href="@{/company/employees(sortBy='name', keyword=${keyword})}" class="sort-link" title="Sort by Name">
+                                Employee Name <i class="fas fa-sort ms-1 text-muted small"></i>
+                            </a>
+                        </th>
+
                         <th>Contact Details</th>
                         <th>System Username</th>
-                        <th class="text-center">Assigned Buildings</th>
+
+                        <th class="text-center">
+                            <a th:href="@{/company/employees(sortBy='buildings', keyword=${keyword})}" class="sort-link" title="Sort by Workload">
+                                Assigned Buildings <i class="fas fa-sort ms-1 text-muted small"></i>
+                            </a>
+                        </th>
+
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
+
                     <tr th:if="${employees.isEmpty()}">
                         <td colspan="5" class="text-center py-5">
-                            <div class="mb-3 text-muted opacity-25">
-                                <i class="fas fa-user-tie fa-3x"></i>
-                            </div>
                             <h6 class="fw-bold text-dark">No employees found</h6>
-                            <p class="text-muted small mb-3">Hire your first building manager to get started.</p>
-                            <a th:href="@{/company/employees/new}" class="btn btn-sm btn-outline-primary">Add Employee</a>
+                            <p th:if="${keyword != null}" class="text-muted small">
+                                No results for "<span th:text="${keyword}"></span>"
+                            </p>
                         </td>
                     </tr>
 
-                    <tr th:each="emp : ${employees}">
+                    <tr th:each="emp : ${employees}" th:id="'row-' + ${emp.id}" class="align-middle">
 
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
                                 <div class="avatar-box bg-purple-subtle me-3">
                                     <i class="fas fa-user text-purple"></i>
                                 </div>
-                                <div>
-                                    <div class="fw-bold text-dark" th:text="${emp.name}">Full Name</div>
-                                    <small class="text-muted">Manager</small>
+                                <div style="width: 100%;">
+                                    <div class="view-mode">
+                                        <div class="fw-bold text-dark" th:text="${emp.name}">Full Name</div>
+                                        <small class="text-muted" th:text="${emp.email}">email@example.com</small>
+                                    </div>
+
+                                    <div class="edit-mode">
+                                        <input type="text" class="table-input fw-bold text-dark mb-1"
+                                               name="name" th:value="${emp.name}"
+                                               th:form="'form-' + ${emp.id}" required placeholder="Name">
+
+                                        <input type="email" class="table-input text-muted small"
+                                               name="email" th:value="${emp.email}"
+                                               th:form="'form-' + ${emp.id}" required placeholder="Email">
+                                    </div>
                                 </div>
                             </div>
                         </td>
 
                         <td>
-                            <div class="d-flex flex-column">
-                                    <span class="mb-1">
-                                        <i class="fas fa-envelope text-muted me-2 small"></i>
-                                        <span th:text="${emp.email}" class="text-dark">email@example.com</span>
-                                    </span>
-                                <span>
-                                        <i class="fas fa-phone text-muted me-2 small"></i>
-                                        <span th:text="${emp.phoneNumber}" class="text-muted small">0888...</span>
-                                    </span>
+                            <div class="view-mode">
+                                <span class="d-block">
+                                    <i class="fas fa-phone text-muted me-2 small"></i>
+                                    <span th:text="${emp.phoneNumber}" class="text-dark small">0888...</span>
+                                </span>
+                            </div>
+
+                            <div class="edit-mode">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-phone text-muted me-2 small"></i>
+                                    <input type="text" class="table-input text-dark small"
+                                           name="phoneNumber" th:value="${emp.phoneNumber}"
+                                           th:form="'form-' + ${emp.id}" required>
+                                </div>
                             </div>
                         </td>
 
                         <td>
-                                <span class="badge bg-light text-dark border fw-normal font-monospace">
-                                    <i class="fas fa-at text-secondary me-1"></i><span th:text="${emp.user.username}">user1</span>
-                                </span>
+                            <span class="badge bg-light text-dark border fw-normal font-monospace">
+                                <i class="fas fa-at text-secondary me-1"></i><span th:text="${emp.user.username}">user1</span>
+                            </span>
                         </td>
 
                         <td class="text-center">
-                                <span th:if="${emp.buildings.size() > 0}"
-                                      class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3 py-2 rounded-pill">
-                                    <span th:text="${emp.buildings.size()}">2</span> Active
-                                </span>
+                            <span th:if="${emp.buildings.size() > 0}"
+                                  class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3 py-2 rounded-pill">
+                                <span th:text="${emp.buildings.size()}">2</span> Active
+                            </span>
                             <span th:if="${emp.buildings.size() == 0}"
                                   class="badge bg-light text-muted border px-3 py-2 rounded-pill">
-                                    Idle (0)
-                                </span>
+                                Idle (0)
+                            </span>
                         </td>
 
                         <td class="text-end pe-4">
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-light btn-sm text-primary border btn-action" title="Edit Profile">
+                            <div class="view-mode">
+                                <button class="btn btn-light btn-sm text-primary border me-1"
+                                        th:onclick="'enableEdit(' + ${emp.id} + ')'" title="Edit Profile">
                                     <i class="fas fa-pen"></i>
-                                </a>
-                                <a href="#" class="btn btn-light btn-sm text-danger border btn-action" title="Fire / Delete"
-                                   onclick="return confirm('Are you sure you want to remove this employee?');">
+                                </button>
+                                <button class="btn btn-light btn-sm text-danger border"
+                                        th:onclick="'prepareDelete(' + ${emp.id} + ')'"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal" title="Fire / Delete">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
+                            </div>
+
+                            <div class="edit-mode">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="submit" class="btn btn-success btn-sm" th:form="'form-' + ${emp.id}" title="Save">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm" th:onclick="'cancelEdit(' + ${emp.id} + ')'" title="Cancel">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -177,11 +220,63 @@
                 <small class="text-muted">Total Staff: <span class="fw-bold text-dark" th:text="${employees.size()}">0</span></small>
             </div>
         </div>
-    </main>
 
+        <div th:each="emp : ${employees}">
+            <form th:id="'form-' + ${emp.id}"
+                  th:action="@{/company/employees/update/{id}(id=${emp.id})}"
+                  method="post"></form>
+        </div>
+
+    </main>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-4">
+                <div class="mb-3 text-danger bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <i class="fas fa-user-slash fa-2x"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Remove Employee?</h5>
+                <p class="text-muted px-4 small">
+                    Are you sure you want to remove this employee? Their user account will be deleted, and their assigned buildings will become <b>Unassigned</b>.
+                </p>
+                <form id="deleteForm" method="post" action="">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger px-4 fw-bold">Confirm Remove</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    function enableEdit(id) {
+        const row = document.getElementById('row-' + id);
+        row.querySelectorAll('.view-mode').forEach(el => el.style.setProperty('display', 'none', 'important'));
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
+
+        const firstInput = row.querySelector('input[name="name"]');
+        if(firstInput) firstInput.focus();
+    }
+
+    function cancelEdit(id) {
+        const row = document.getElementById('row-' + id);
+        row.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'none');
+        row.querySelectorAll('.view-mode').forEach(el => el.style.display = '');
+    }
+
+    function prepareDelete(id) {
+        document.getElementById('deleteForm').action = '/company/employees/delete/' + id;
+    }
+</script>
 
 </body>
 </html>

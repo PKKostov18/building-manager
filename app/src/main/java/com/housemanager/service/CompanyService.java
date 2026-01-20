@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
@@ -41,6 +41,11 @@ public class CompanyService {
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRoles(Set.of(companyRole));
 
+        Company company = getCompany(dto, user);
+        companyRepository.save(company);
+    }
+
+    private static Company getCompany(CompanyRegistrationDto dto, User user) {
         Company company = new Company();
         company.setName(dto.getCompanyName());
         company.setBulstat(dto.getBulstat());
@@ -50,7 +55,7 @@ public class CompanyService {
         company.setDefaultElevatorTax(dto.getDefaultElevatorTax() != null ? dto.getDefaultElevatorTax() : 0.0);
         company.setDefaultPetTax(dto.getDefaultPetTax() != null ? dto.getDefaultPetTax() : 0.0);
         company.setUser(user);
-        companyRepository.save(company);
+        return company;
     }
 
     @Transactional
@@ -58,15 +63,12 @@ public class CompanyService {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Company not found with id: " + id));
 
-        // 1. СЪБИРАМЕ ВСИЧКИ ПОТРЕБИТЕЛИ И РАЗКАЧАМЕ СОБСТВЕНИЦИТЕ (CRITICAL FIX)
         Set<User> usersToDelete = new HashSet<>();
 
-        // А. Company Admin
         if (company.getUser() != null) {
             usersToDelete.add(company.getUser());
         }
 
-        // Б. Employee Users
         List<Employee> employees = employeeRepository.findByCompany(company);
         for (Employee emp : employees) {
             if (emp.getUser() != null) {
@@ -74,28 +76,20 @@ public class CompanyService {
             }
         }
 
-        // В. Apartment Owners - ТУК Е ОСНОВНАТА КОРЕКЦИЯ
         List<Building> buildings = buildingRepository.findByCompany(company);
 
-        // Събираме всички апартаменти от всички сгради наведнъж (или в цикъл)
         for (Building building : buildings) {
             List<Apartment> apartments = apartmentRepository.findByBuilding(building);
 
             for (Apartment apartment : apartments) {
                 if (apartment.getOwner() != null) {
-                    // Добавяме в списъка за триене
                     usersToDelete.add(apartment.getOwner());
-
-                    // ВАЖНО: Премахваме връзката веднага!
-                    // Това предотвратява грешката, дори ако Hibernate размести реда на заявките
                     apartment.setOwner(null);
                     apartmentRepository.save(apartment);
                 }
             }
         }
 
-        // 2. ПОЧИСТВАНЕ НА ПЛАЩАНИЯТА
-        // 2.1. Плащания на потребителите
         for (User user : usersToDelete) {
             List<Payment> userPayments = paymentRepository.findByPayer(user);
             if (!userPayments.isEmpty()) {
@@ -103,7 +97,6 @@ public class CompanyService {
             }
         }
 
-        // 2.2. Плащания на апартаментите
         for (Building building : buildings) {
             List<Apartment> apartments = apartmentRepository.findByBuilding(building);
             for (Apartment apartment : apartments) {
@@ -114,41 +107,30 @@ public class CompanyService {
             }
         }
 
-        // Изчистваме плащанията от базата веднага
         paymentRepository.flush();
 
-        // 3. ТРИЕМ СТРУКТУРАТА (ОТДОЛУ-НАГОРЕ)
         for (Building building : buildings) {
             List<Apartment> apartments = apartmentRepository.findByBuilding(building);
 
             for (Apartment apartment : apartments) {
-                // Трием жителите
                 List<Resident> residents = residentRepository.findByApartment(apartment);
                 residentRepository.deleteAll(residents);
             }
-            // Трием апартаментите
             apartmentRepository.deleteAll(apartments);
         }
 
-        // ВАЖНО: Казваме на базата, че апартаментите ги няма ВЕЧЕ.
-        // Без този flush, SQL сървърът може още да пази апартаментите, когато стигнем до триенето на User.
         apartmentRepository.flush();
 
-        // Трием сградите
         buildingRepository.deleteAll(buildings);
         buildingRepository.flush();
 
-        // 4. ТРИЕМ СЛУЖИТЕЛИТЕ И КОМПАНИЯТА
-        // Тъй като вече няма апартаменти, които да сочат към User-ите, Employees могат да се трият безопасно
         employeeRepository.deleteAll(employees);
         employeeRepository.flush();
 
         companyRepository.delete(company);
         companyRepository.flush();
 
-        // 5. ТРИЕМ ПОТРЕБИТЕЛИТЕ (НАКРАЯ)
         for (User user : usersToDelete) {
-            // Проверяваме отново дали съществува, защото Cascade Delete от Employee или Company може вече да го е изтрил
             if (userRepository.existsById(user.getId())) {
                 userRepository.delete(user);
             }
@@ -156,8 +138,9 @@ public class CompanyService {
 
         userRepository.flush();
     }
+
     @Transactional
-    public void updateCompany(Long id, CompanyRegistrationDto dto) {
+    public void updateCompany(Long id, CompanyRegistrationDto dto, Long newUserId) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Company not found with id: " + id));
 
@@ -175,6 +158,63 @@ public class CompanyService {
         if (dto.getDefaultElevatorTax() != null) company.setDefaultElevatorTax(dto.getDefaultElevatorTax());
         if (dto.getDefaultPetTax() != null) company.setDefaultPetTax(dto.getDefaultPetTax());
 
+        if (newUserId != null) {
+            User newUser = userRepository.findById(newUserId).orElse(null);
+
+            if (newUser != null) {
+                Optional<Employee> promotedEmployeeOpt = employeeRepository.findByUser(newUser);
+
+                if (promotedEmployeeOpt.isPresent() &&
+                        promotedEmployeeOpt.get().getCompany().getId().equals(company.getId())) {
+
+                    reassignBuildings(company, promotedEmployeeOpt.get());
+                }
+                Role companyRole = roleRepository.findByName(RoleType.ROLE_COMPANY)
+                        .orElseThrow(() -> new RuntimeException("Error: Role ROLE_COMPANY not found."));
+
+                newUser.getRoles().clear();
+                newUser.getRoles().add(companyRole);
+
+                userRepository.save(newUser);
+
+                company.setUser(newUser);
+            }
+        } else {
+            company.setUser(null);
+        }
+
         companyRepository.save(company);
+    }
+
+    private void reassignBuildings(Company company, Employee promotedEmployee) {
+        List<Building> buildingsToTransfer = buildingRepository.findByEmployee(promotedEmployee);
+
+        if (buildingsToTransfer.isEmpty()) {
+            return;
+        }
+
+        List<Employee> colleagues = employeeRepository.findByCompany(company);
+
+        Employee targetEmployee = null;
+        long minBuildings = Long.MAX_VALUE;
+
+        for (Employee emp : colleagues) {
+            if (emp.getId().equals(promotedEmployee.getId())) {
+                continue;
+            }
+
+            long currentCount = buildingRepository.countByEmployee(emp);
+            if (currentCount < minBuildings) {
+                minBuildings = currentCount;
+                targetEmployee = emp;
+            }
+        }
+
+        if (targetEmployee != null) {
+            for (Building building : buildingsToTransfer) {
+                building.setEmployee(targetEmployee);
+                buildingRepository.save(building);
+            }
+        }
     }
 }

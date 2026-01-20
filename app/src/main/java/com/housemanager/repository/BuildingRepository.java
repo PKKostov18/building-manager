@@ -12,8 +12,8 @@ import java.util.List;
 public interface BuildingRepository extends JpaRepository<Building, Long> {
 
     List<Building> findAllByCompany(Company company);
-    boolean existsByAddressAndCompany(String address, Company company);
     long countByCompany(Company company);
     List<Building> findByEmployee(Employee employee);
     List<Building> findByCompany(Company company);
+    long countByEmployee(Employee employee);
 }

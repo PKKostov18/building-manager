@@ -42,4 +42,7 @@ public class Apartment {
             orphanRemoval = true
     )
     private List<Resident> residents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY)
+    private List<Payment> payments;
 }

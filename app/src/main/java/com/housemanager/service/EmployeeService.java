@@ -56,7 +56,6 @@ public class EmployeeService {
         employee = employeeRepository.save(employee);
 
         List<Building> companyBuildings = buildingRepository.findAllByCompany(company);
-
         for (Building b : companyBuildings) {
             if (b.getEmployee() == null) {
                 b.setEmployee(employee);
@@ -68,5 +67,50 @@ public class EmployeeService {
     public Employee findCurrentEmployee(String username) {
         return employeeRepository.findByUser_Username(username)
                 .orElseThrow(() -> new RuntimeException("Employee profile not found for user: " + username));
+    }
+
+    @Transactional
+    public void updateEmployee(Long id, EmployeeRegistrationDto dto) {
+        Employee emp = employeeRepository.findById(id).orElseThrow();
+        emp.setName(dto.getName());
+        emp.setEmail(dto.getEmail());
+        emp.setPhoneNumber(dto.getPhoneNumber());
+        employeeRepository.save(emp);
+    }
+
+    @Transactional
+    public void deleteEmployee(Long id) {
+        Employee employeeToDelete = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        List<Building> buildingsToReassign = buildingRepository.findByEmployee(employeeToDelete);
+
+        if (!buildingsToReassign.isEmpty()) {
+            List<Employee> colleagues = employeeRepository.findAllByCompany(employeeToDelete.getCompany());
+
+            Employee targetEmployee = null;
+            long minBuildings = Long.MAX_VALUE;
+
+            for (Employee col : colleagues) {
+                if (col.getId().equals(employeeToDelete.getId())) continue;
+
+                long count = buildingRepository.countByEmployee(col);
+                if (count < minBuildings) {
+                    minBuildings = count;
+                    targetEmployee = col;
+                }
+            }
+
+            for (Building b : buildingsToReassign) {
+                b.setEmployee(targetEmployee);
+                buildingRepository.save(b);
+            }
+        }
+
+        if (employeeToDelete.getUser() != null) {
+            userRepository.delete(employeeToDelete.getUser());
+        }
+
+        employeeRepository.delete(employeeToDelete);
     }
 }

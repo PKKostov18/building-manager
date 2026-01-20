@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "companies")
 @Getter
@@ -36,4 +38,10 @@ public class Company {
 
     @Column(name = "default_pet_tax")
     private double defaultPetTax;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    private List<Employee> employees;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    private List<Building> buildings;
 }
